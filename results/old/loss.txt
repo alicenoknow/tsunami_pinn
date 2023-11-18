@@ -1,0 +1,123 @@
+epochs=30k
+================== 1 ==================
+Total loss: 	0.00117 (1.171E-03)
+Interior loss: 	0.68845 (6.884E-01)
+Initial loss: 	0.00014 (1.378E-04)
+Bondary loss: 	0.68943 (6.894E-01)
+
+WEIGHT_RESIDUAL = 0.001 
+WEIGHT_INITIAL = 3.0 
+WEIGHT_BOUNDARY = 0.0001
+================== 2 ================== 
+Total loss: 	0.01371 (1.371E-02)
+Interior loss: 	0.52405 (5.241E-01)
+Initial loss: 	0.00331 (3.313E-03)
+Bondary loss: 	0.93102 (9.310E-01)
+
+WEIGHT_RESIDUAL = 0.01
+WEIGHT_INITIAL = 2.5
+WEIGHT_BOUNDARY = 0.0002
+
+================== 3 ================== 
+Total loss: 	0.01790 (1.790E-02)
+Interior loss: 	0.22329 (2.233E-01)
+Initial loss: 	0.00606 (6.055E-03)
+Bondary loss: 	1.06077 (1.061E+00)
+
+WEIGHT_RESIDUAL = 0.01
+WEIGHT_INITIAL = 2.5
+WEIGHT_BOUNDARY = 0.0005
+
+================== 4 ================== 
+Total loss: 	0.01530 (1.530E-02)
+Interior loss: 	0.58002 (5.800E-01)
+Initial loss: 	0.00338 (3.382E-03)
+Bondary loss: 	1.04552 (1.046E+00)
+
+WEIGHT_RESIDUAL = 0.01
+WEIGHT_INITIAL = 2.5
+WEIGHT_BOUNDARY = 0.001
+
+================== 5 ================== 
+Total loss: 	0.00062 (6.216E-04)
+Interior loss: 	0.30694 (3.069E-01)
+Initial loss: 	0.00009 (8.827E-05)
+Bondary loss: 	0.93962 (9.396E-01)
+
+WEIGHT_RESIDUAL = 0.001
+WEIGHT_INITIAL = 2.5
+WEIGHT_BOUNDARY = 0.0001
+
+================== 6 ================== 
+Total loss: 	0.04364 (4.364E-02)
+Interior loss: 	0.35375 (3.538E-01)
+Initial loss: 	0.01601 (1.601E-02)
+Bondary loss: 	0.72302 (7.230E-01)
+
+WEIGHT_RESIDUAL = 0.01
+WEIGHT_INITIAL = 2.5
+WEIGHT_BOUNDARY = 0.0001
+
+================== 7 ================== 
+Total loss: 	0.00318 (3.183E-03)
+Interior loss: 	2.36343 (2.363E+00)
+Initial loss: 	0.00021 (2.055E-04)
+Bondary loss: 	0.99975 (9.998E-01)
+
+WEIGHT_RESIDUAL = 0.001
+WEIGHT_INITIAL = 3.5
+WEIGHT_BOUNDARY = 0.0001
+
+================== 8 ================== 
+Total loss: 	0.01116 (1.116E-02)
+Interior loss: 	3.13573 (3.136E+00)
+Initial loss: 	0.00263 (2.635E-03)
+Bondary loss: 	1.19657 (1.197E+00)
+
+WEIGHT_RESIDUAL = 0.001
+WEIGHT_INITIAL = 3
+WEIGHT_BOUNDARY = 0.0001
+
+================== 9 ================== 
+WEIGHT_RESIDUAL = 0.001
+WEIGHT_INITIAL = 2
+WEIGHT_BOUNDARY = 0.0001
+
+Total loss: 	0.00194 (1.935E-03)
+Interior loss: 	0.82326 (8.233E-01)
+Initial loss: 	0.00048 (4.839E-04)
+Bondary loss: 	1.44525 (1.445E+00)
+
+================= 10 ================== 
+Total loss: 	0.00576 (5.756E-03)
+Interior loss: 	1.37138 (1.371E+00)
+Initial loss: 	0.00134 (1.337E-03)
+Bondary loss: 	1.69875 (1.699E+00)
+
+WEIGHT_RESIDUAL = 0.002 
+WEIGHT_INITIAL = 2 
+WEIGHT_BOUNDARY = 0.0002 
+
+================= 11 ================== 
+Total loss: 	0.01178 (1.178E-02)
+Interior loss: 	2.69536 (2.695E+00)
+Initial loss: 	0.00359 (3.587E-03)
+Bondary loss: 	1.17842 (1.178E+00)
+
+
+WEIGHT_RESIDUAL = 0.001
+WEIGHT_INITIAL = 2.5
+WEIGHT_BOUNDARY = 0.0001
+
+================= 12 ================== epochs=80k
+WEIGHT_RESIDUAL = 0.01
+WEIGHT_INITIAL = 1
+WEIGHT_BOUNDARY = 0.001
+epochs=80k
+
+Total loss: 	0.01231 (1.231E-02)
+Interior loss: 	0.25157 (2.516E-01)
+Initial loss: 	0.00879 (8.789E-03)
+Bondary loss: 	1.00191 (1.002E+00)
+
+================= 13 ==================

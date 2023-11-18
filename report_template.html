@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .title {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .table {
+            flex: 1;
+            margin: 20px;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            border-bottom: 1px solid #000;
+            padding: 2px;
+        }
+        .image {
+            max-width: 400px;
+            max-height: 400px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Iteration {{ num }}</div>
+    <div>{{ date }}</div>
+
+    <div class="container">
+        <table class="table">
+            <tr>
+                <th colspan="2">Parameters</th>
+            </tr>
+            <tr>
+                <td>WEIGHT_RESIDUAL</td><td>{{ WEIGHT_RESIDUAL }}</td>
+            </tr>
+            <tr>
+                <td>WEIGHT_INITIAL</td><td>{{ WEIGHT_INITIAL }}</td>
+            </tr>
+            <tr>
+                <td>WEIGHT_BOUNDARY</td><td>{{ WEIGHT_BOUNDARY }}</td>
+            </tr>        
+            <tr>
+                <td>LAYERS</td><td>{{ LAYERS }}</td>
+            </tr>        
+            <tr>
+                <td>NEURONS_PER_LAYER</td><td>{{ NEURONS_PER_LAYER }}</td>
+            </tr>
+            <tr>
+                <td>EPOCHS</td><td>{{ EPOCHS }}</td>
+            </tr>        
+            <tr>
+                <td>LEARNING_RATE</td><td>{{ LEARNING_RATE }}</td>
+            </tr>
+        </table>
+
+        <table class="table">
+            <tr>
+                <th colspan="2">Results</th>
+            </tr>
+            <tr>
+                <td>TOTAL LOSS</td><td>{{ total_loss }}</td>
+            </tr>
+            <tr>
+                <td>RESIDUAL LOSS</td><td>{{ residual_loss }}</td>
+            </tr>  
+            <tr>
+                <td>INITIAL LOSS</td><td>{{ initial_loss }}</td>
+            </tr>
+            <tr>
+                <td>BOUNDARY LOSS</td><td>{{ boundary_loss }}</td>
+            </tr>        
+        </table>
+    </div>
+
+
+
+
+    <table class="table">
+        <tr>
+            <th colspan="2">Losses</th>
+        </tr>
+        <tr>
+            <td><img class="image" src="{{ img1 }}" alt="Total loss"></td>
+            <td><img class="image" src="{{ img2 }}" alt="Initial loss"></td>
+        </tr>
+        <tr>
+            <td><img class="image" src="{{ img3 }}" alt="Residual loss"></td>
+            <td><img class="image" src="{{ img4 }}" alt="Boundary loss"></td>
+        </tr>
+    </table>
+</body>
+</html>
