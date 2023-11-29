@@ -1,6 +1,5 @@
 from typing import Callable
 
-from environment.domain import Domain
 from environment.env import SimulationEnvironment
 from loss.wave_equations import dfdx, dfdy, f
 from model.pinn import PINN
@@ -12,13 +11,11 @@ class Loss:
     def __init__(
         self,
         environment: SimulationEnvironment,
-        domain: Domain,
         weights: Weights,
         params: SimulationParameters,
         initial_condition: Callable,
         wave_equation: Callable,
     ):
-        self.domain = domain
         self.environment = environment
         self.weights = weights
         self.params = params
@@ -34,7 +31,8 @@ class Loss:
 
     def initial_loss(self, pinn: PINN):
         x, y, t = self.environment.initial_points
-        pinn_init = self.initial_condition(x, y, Domain().X_DOMAIN[1], Domain().Y_DOMAIN[1])
+        length = self.environment.domain.XY_DOMAIN[1]
+        pinn_init = self.initial_condition(x, y, length)
         loss = f(pinn, x, y, t) - pinn_init
 
         return loss.pow(2).mean()

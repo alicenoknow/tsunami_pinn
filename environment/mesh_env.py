@@ -10,14 +10,15 @@ class MeshEnvironment(SimulationEnvironment):
     def __init__(self, mesh_filename: str,
                     device=torch.device("cpu")) -> None:
         super().__init__()
+        self.domain = Domain()
         self.device = device
         self.mesh_filename = mesh_filename
 
+        self.interior_points = self.get_interior_points()
         self.initial_points = self.get_initial_points()
         self.boundary_points = self.get_boundary_points()
-        self.interior_points = self.get_interior_points()
     
-    def get_initial_points(self, requires_grad=True):
+    def get_initial_points(self,  _n_points: int=None, requires_grad=True):
         x_raw, y_raw, _ = dump_points(self.mesh_filename)
         x_grid = x_raw.to(self.device)
         y_grid = y_raw.to(self.device)
@@ -27,7 +28,7 @@ class MeshEnvironment(SimulationEnvironment):
 
         x_grid = x_grid.reshape(-1, 1).to(self.device)
         y_grid = y_grid.reshape(-1, 1).to(self.device)
-        t0 = torch.full_like(x_grid, Domain().T_DOMAIN[0], requires_grad=requires_grad)
+        t0 = torch.full_like(x_grid, self.T_DOMAIN[0], requires_grad=requires_grad)
 
         return (x_grid, y_grid, t0)
 
@@ -55,10 +56,10 @@ class MeshEnvironment(SimulationEnvironment):
         y_grid.requires_grad = requires_grad
         t_grid.requires_grad = requires_grad
 
-        x0 = torch.full_like(t_grid, Domain().X_DOMAIN[0], requires_grad=requires_grad)
-        x1 = torch.full_like(t_grid, Domain().X_DOMAIN[1], requires_grad=requires_grad)
-        y0 = torch.full_like(t_grid, Domain().Y_DOMAIN[0], requires_grad=requires_grad)
-        y1 = torch.full_like(t_grid, Domain().Y_DOMAIN[1], requires_grad=requires_grad)
+        x0 = torch.full_like(t_grid, self.domain.XY_DOMAIN[0], requires_grad=requires_grad)
+        x1 = torch.full_like(t_grid, self.domain.XY_DOMAIN[1], requires_grad=requires_grad)
+        y0 = torch.full_like(t_grid, self.domain.XY_DOMAIN[0], requires_grad=requires_grad)
+        y1 = torch.full_like(t_grid, self.domain.XY_DOMAIN[1], requires_grad=requires_grad)
 
         down    = (x_grid, y0,     t_grid)
         up      = (x_grid, y1,     t_grid)
@@ -69,7 +70,7 @@ class MeshEnvironment(SimulationEnvironment):
     
     def get_interior_points(self, requires_grad=True):
         x_raw, y_raw, z_raw = dump_points(self.mesh_filename)
-        t_raw = torch.linspace(Domain().T_DOMAIN[0], Domain().T_DOMAIN[1], steps=Domain().T_POINTS)
+        t_raw = torch.linspace(self.domain.T_DOMAIN[0], self.domain.T_DOMAIN[1], steps=self.domain.T_POINTS)
         
         x_grid, t_grid = torch.meshgrid(x_raw, t_raw, indexing="ij")
         y_grid, _      = torch.meshgrid(y_raw, t_raw, indexing="ij")
@@ -85,17 +86,14 @@ class MeshEnvironment(SimulationEnvironment):
         z.requires_grad = requires_grad
         t.requires_grad = requires_grad
 
-        Domain().X_DOMAIN = [x.min().item(), x.max().item()]
-        Domain().Y_DOMAIN = [y.min().item(), y.max().item()]
-
-        Domain().X_POINTS = x.size()[0] // Domain().T_POINTS
-        Domain().Y_POINTS = y.size()[0] // Domain().T_POINTS
+        self.domain.XY_DOMAIN = [x.min().item(), x.max().item()]
+        self.domain.N_POINTS = x.size()[0] // self.domain.T_POINTS
 
         return x, y, z, t
 
     def _generate_linespaces(self, requires_grad=False):
-        x_domain, y_domain, t_domain = Domain().X_DOMAIN, Domain().Y_DOMAIN, Domain().T_DOMAIN
-        x_points, y_points, t_points = Domain().X_POINTS, Domain().Y_POINTS, Domain().T_POINTS
+        x_domain, y_domain, t_domain = self.domain.XY_DOMAIN, self.domain.XY_DOMAIN, self.domain.T_DOMAIN
+        x_points, y_points, t_points = self.domain.N_POINTS,self.domain.N_POINTS, self.domain.T_POINTS
 
         x_linspace = torch.linspace(x_domain[0], x_domain[1], steps=x_points, requires_grad=requires_grad)
         y_linspace = torch.linspace(y_domain[0], y_domain[1], steps=y_points, requires_grad=requires_grad)

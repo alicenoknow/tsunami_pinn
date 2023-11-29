@@ -23,7 +23,6 @@ class Training:
         self.weights = weights
         self.params = params
         self.environment = environment
-        # self.domain = domain
 
         self.best_loss = float("inf")
     
@@ -36,14 +35,15 @@ class Training:
         self.print_summary()
 
         if self.params.VISUALIZE:
-            plot_running_average(loss_total, "Loss function (running average)", "total_loss", self.params.RUN_NUM)
-            plot_running_average(loss_r, "Residual loss function (running average)", "residual_loss", self.params.RUN_NUM)
-            plot_running_average(loss_i, "Initial loss function (running average)", "initial_loss", self.params.RUN_NUM)
-            plot_running_average(loss_b, "Boundary loss function (running average)", "boundary_loss", self.params.RUN_NUM)
+            run_num = self.params.RUN_NUM
+            plot_running_average(loss_total, "Loss function (running average)", "total_loss", run_num)
+            plot_running_average(loss_r, "Residual loss function (running average)", "residual_loss", run_num)
+            plot_running_average(loss_i, "Initial loss function (running average)", "initial_loss", run_num)
+            plot_running_average(loss_b, "Boundary loss function (running average)", "boundary_loss", run_num)
 
-            plot_initial_condition(self.environment, self.model, initial_condition, Domain(), self.params.RUN_NUM, self.params.MESH)
-            plot_simulation_by_frame(Domain(), self.model, self.environment, self.params.RUN_NUM, self.params.MESH)
-            create_gif(self.params.RUN_NUM, Domain().T_DOMAIN[1]) 
+            plot_initial_condition(self.environment, self.model, initial_condition, run_num, mesh=self.params.MESH)
+            plot_simulation_by_frame(self.model, self.environment, run_num, mesh=self.params.MESH)
+            create_gif(run_num, self.environment.domain.T_DOMAIN[1]) 
 
         if self.params.REPORT:
             losses = self.loss.verbose(self.model)

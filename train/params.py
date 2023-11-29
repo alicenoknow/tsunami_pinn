@@ -20,5 +20,6 @@ class SimulationParameters:
 
     # Simulation params
     GRAVITY: float = 9.81
+    # MESH = None
     MESH = os.path.join("data", "val_square_UTM_translated_1.inp")
 

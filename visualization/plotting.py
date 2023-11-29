@@ -30,23 +30,24 @@ def create_gif(run: int,
 def plot_initial_condition(environment: SimulationEnvironment,
                           pinn: PINN,
                           initial_condition: Callable,
-                          domain: Domain,
                           run_num: int,
                           mesh: str = None) -> None:
     
     title = "Initial condition"
+    n_points_plot = environment.domain.N_POINTS_PLOT
+    length = environment.domain.XY_DOMAIN[1]
     
-    x, y, t = environment.get_initial_points(requires_grad=False)
+    x, y, t = environment.get_initial_points(n_points_plot, requires_grad=False)
 
-    z = initial_condition(x, y, domain.X_DOMAIN[1], domain.Y_DOMAIN[1])
+    z = initial_condition(x, y, length)
     
-    fig1 = plot_color(z, x, y, domain.X_POINTS, domain.Y_POINTS, f"{title} - exact")
-    fig2 = plot_3D(z, x, y, domain, mesh, f"{title} - exact")
+    fig1 = plot_color(z, x, y, n_points_plot, f"{title} - exact")
+    fig2 = plot_3D(z, x, y, n_points_plot, length, mesh, f"{title} - exact")
     
     z = pinn(x, y, t)
     
-    fig3 = plot_color(z, x, y, domain.X_POINTS, domain.Y_POINTS, f"{title} - PINN")    
-    fig4 = plot_3D(z, x, y, domain, mesh, f"{title} - PINN")
+    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN")    
+    fig4 = plot_3D(z, x, y, n_points_plot, length, mesh, f"{title} - PINN")
     
     c1 = fig1.canvas
     c2 = fig2.canvas
@@ -75,14 +76,14 @@ def plot_initial_condition(environment: SimulationEnvironment,
     plt.savefig(os.path.join("results", f"run_{run_num}", "initial.png"))
 
 
-def plot_color(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_x, n_points_y, title, figsize=(8, 6), dpi=100, cmap="viridis"):
+def plot_color(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, title, figsize=(8, 6), dpi=100, cmap="viridis"):
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     z_raw = z.detach().cpu().numpy()
     x_raw = x.detach().cpu().numpy()
     y_raw = y.detach().cpu().numpy()
-    X = x_raw.reshape(n_points_x, n_points_y)
-    Y = y_raw.reshape(n_points_x, n_points_y)
-    Z = z_raw.reshape(n_points_x, n_points_y)
+    X = x_raw.reshape(n_points_plot, n_points_plot)
+    Y = y_raw.reshape(n_points_plot, n_points_plot)
+    Z = z_raw.reshape(n_points_plot, n_points_plot)
     ax.set_title(title)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
@@ -91,15 +92,15 @@ def plot_color(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_x, n_
 
     return fig
 
-def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, domain: Domain, mesh_file: str, title: str, figsize=(8, 6), limit=4):
+def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, length: int, mesh_file: str, title: str, figsize=(8, 6), limit=4):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
     z_raw = z.detach().cpu().numpy()
     x_raw = x.detach().cpu().numpy()
     y_raw = y.detach().cpu().numpy()
-    X = x_raw.reshape(domain.X_POINTS, domain.Y_POINTS)
-    Y = y_raw.reshape(domain.X_POINTS, domain.Y_POINTS)
-    Z = z_raw.reshape(domain.X_POINTS, domain.Y_POINTS)
+    X = x_raw.reshape(n_points_plot, n_points_plot)
+    Y = y_raw.reshape(n_points_plot, n_points_plot)
+    Z = z_raw.reshape(n_points_plot, n_points_plot)
     ax.set_title(title)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
@@ -113,47 +114,49 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, domain: Domain, m
 
     else:
         # based on floor function
-        x_floor = torch.linspace(0.0, domain.X_DOMAIN[1], steps=domain.X_POINTS)
-        y_floor = torch.linspace(0.0, domain.Y_DOMAIN[1], steps=domain.Y_POINTS)
-        z_floor = torch.zeros((domain.X_POINTS, domain.Y_POINTS))
+        x_floor = torch.linspace(0.0, length, steps=n_points_plot)
+        y_floor = torch.linspace(0.0, length, steps=n_points_plot)
+        z_floor = torch.zeros((n_points_plot, n_points_plot))
         for x_idx, _ in enumerate(x_floor):
             for y_idx, _ in enumerate(y_floor):
                 z_floor[x_idx, y_idx] = 0
-        x_floor = torch.tile(x_floor, (domain.X_POINTS, 1))
-        y_floor = torch.tile(y_floor, (domain.Y_POINTS, 1)).T
+        x_floor = torch.tile(x_floor, (n_points_plot, 1))
+        y_floor = torch.tile(y_floor, (n_points_plot, 1)).T
         ax.plot_surface(x_floor, y_floor, z_floor, color='green', alpha=0.7)
 
     return fig
 
 def plot_frame(environment: SimulationEnvironment,
                 pinn: PINN,
-                domain: Domain,
                 run_num: int,
                 idx: int,
                 t_value: float,
                 mesh: str = None) -> None:
-    x, y, t = environment.get_initial_points(requires_grad=False)
+    
+    n_points_plot = environment.domain.N_POINTS_PLOT
+    length = environment.domain.XY_DOMAIN[1]
+    x, y, t = environment.get_initial_points(n_points_plot, requires_grad=False)
+
     t = torch.full_like(x, t_value)
     z = pinn(x, y, t)
-    fig1 = plot_color(z, x, y, domain.X_POINTS, domain.Y_POINTS, f"PINN for t = {t_value}")
-    fig2 = plot_3D(z, x, y, domain, mesh, f"PINN for t = {t_value}")
+    fig1 = plot_color(z, x, y, n_points_plot, f"PINN for t = {t_value}")
+    fig2 = plot_3D(z, x, y, n_points_plot, length, mesh, f"PINN for t = {t_value}")
     plt.savefig(os.path.join("results", f"run_{run_num}", "img", "img_{:03d}.png".format(idx)))
     plt.close(fig1)
     plt.close(fig2)
 
-def plot_simulation_by_frame(domain: Domain, 
-                             pinn: PINN, 
+def plot_simulation_by_frame(pinn: PINN, 
                              environment: SimulationEnvironment,
                              run_num: int,
                              time_step:float=0.01,
                              mesh: str = None) -> None:
-    time_values = np.arange(0, domain.T_DOMAIN[1], time_step)
+    t_max = environment.domain.T_DOMAIN[1]    
+    time_values = np.arange(0, t_max, time_step)
 
     for idx, t_value in enumerate(time_values):
         plot_frame(environment=environment,
-                   domain=domain,
-                   run_num=run_num,
                    pinn=pinn,
+                   run_num=run_num,
                    idx=idx,
                    t_value=t_value,
                    mesh=mesh)

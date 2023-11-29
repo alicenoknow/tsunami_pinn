@@ -19,13 +19,13 @@ if __name__ == '__main__':
 
     params = SimulationParameters(EPOCHS=4)
     weights = Weights()
-    pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
+
+    pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)
 
 
     loss = Loss(
         environment,
-        Domain(),
         weights,
         params,
         initial_condition,
