@@ -1,0 +1,72 @@
+import torch
+from typing import Union
+
+# from model.pinn import PINN
+
+def f(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
+    """Compute the value of the approximate solution from the NN model"""
+    return pinn(x, y, t)
+
+
+def df(output: torch.Tensor, input: torch.Tensor, order: int = 1) -> torch.Tensor:
+    """Compute neural network derivative with respect to input features using PyTorch autograd engine"""
+    df_value = output
+    for _ in range(order):
+        df_value = torch.autograd.grad(
+            df_value,
+            input,
+            grad_outputs=torch.ones_like(input),
+            create_graph=True,
+            retain_graph=True,
+        )[0]
+
+    return df_value
+
+def dfdt(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, t: torch.Tensor, u:Union[torch.Tensor, None]=None, order: int = 1):
+    """u is a precalculated f() value"""
+    u = u if u is not None else f(pinn, x, y, t)
+    return df(u, t, order=order)
+
+
+def dfdx(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, t: torch.Tensor, u:Union[torch.Tensor, None]=None, order: int = 1):
+    u = u if u is not None else f(pinn, x, y, t)
+    return df(u, x, order=order)
+
+
+def dfdy(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, t: torch.Tensor, u:Union[torch.Tensor, None]=None, order: int = 1):
+    u = u if u is not None else f(pinn, x, y, t)    
+    return df(u, y, order=order)
+
+
+def dzdx(x: torch.Tensor, y: torch.Tensor, order: int = 1):
+    # TODO
+    return 0
+
+
+def dzdy(x: torch.Tensor, y: torch.Tensor, order: int = 1):
+    # TODO
+    return 0
+
+
+# Simplified for z(x,y) = 0
+def wave_equation_simplified(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, t: torch.Tensor, G: float):
+    u = f(pinn, x, y, t)
+
+    return dfdt(pinn, x, y, t, u, order=2) - \
+        G * (dfdx(pinn, x, y, t, u) ** 2 + \
+        (u-z) * dfdx(pinn, x, y, t, u, order=2) + \
+        dfdy(pinn, x, y, t, u) ** 2 + \
+        (u-z) * dfdy(pinn, x, y, t, u, order=2))
+
+
+def wave_equation(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, t: torch.Tensor, G: float):
+    u = f(pinn, x, y, t)
+
+    return dfdt(pinn, x, y, t, u, order=2) - \
+        G * ((dfdx(pinn, x, y, t, u) - \
+        dzdx(x,y))*dfdx(pinn, x, y, t, u) + \
+        (u-z) * dfdx(pinn, x, y, t, u, order=2) + \
+        (dfdy(pinn, x, y, t, u) - \
+        dzdy(x,y))*dfdy(pinn, x, y, t, u) + \
+        (u-z) * dfdy(pinn, x, y, t, u, order=2))
+        

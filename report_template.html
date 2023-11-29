@@ -25,6 +25,7 @@
         .container {
             display: flex;
             flex-direction: row;
+            margin-right: 1rem;
         }
     </style>
 </head>
@@ -38,25 +39,28 @@
                 <th colspan="2">Parameters</th>
             </tr>
             <tr>
-                <td>WEIGHT_RESIDUAL</td><td>{{ WEIGHT_RESIDUAL }}</td>
+                <td>WEIGHT_RESIDUAL</td><td>{{ weight_r }}</td>
             </tr>
             <tr>
-                <td>WEIGHT_INITIAL</td><td>{{ WEIGHT_INITIAL }}</td>
+                <td>WEIGHT_INITIAL</td><td>{{ weight_i }}</td>
             </tr>
             <tr>
-                <td>WEIGHT_BOUNDARY</td><td>{{ WEIGHT_BOUNDARY }}</td>
+                <td>WEIGHT_BOUNDARY</td><td>{{ weight_b }}</td>
             </tr>        
             <tr>
-                <td>LAYERS</td><td>{{ LAYERS }}</td>
+                <td>LAYERS</td><td>{{ layers }}</td>
             </tr>        
             <tr>
-                <td>NEURONS_PER_LAYER</td><td>{{ NEURONS_PER_LAYER }}</td>
+                <td>NEURONS_PER_LAYER</td><td>{{ neurons }}</td>
             </tr>
             <tr>
-                <td>EPOCHS</td><td>{{ EPOCHS }}</td>
+                <td>EPOCHS</td><td>{{ epochs }}</td>
             </tr>        
             <tr>
-                <td>LEARNING_RATE</td><td>{{ LEARNING_RATE }}</td>
+                <td>LEARNING_RATE</td><td>{{ lr }}</td>
+            </tr>
+            <tr>
+                <td>MESH</td><td>{{ mesh_name }}</td>
             </tr>
         </table>
 
@@ -87,12 +91,12 @@
             <th colspan="2">Losses</th>
         </tr>
         <tr>
-            <td><img class="image" src="{{ img1 }}" alt="Total loss"></td>
-            <td><img class="image" src="{{ img2 }}" alt="Initial loss"></td>
+            <td><img class="image" src="{{ img_loss }}" alt="Total loss"></td>
+            <td><img class="image" src="{{ img_loss_i }}" alt="Initial loss"></td>
         </tr>
         <tr>
-            <td><img class="image" src="{{ img3 }}" alt="Residual loss"></td>
-            <td><img class="image" src="{{ img4 }}" alt="Boundary loss"></td>
+            <td><img class="image" src="{{ img_loss_r }}" alt="Residual loss"></td>
+            <td><img class="image" src="{{ img_loss_b }}" alt="Boundary loss"></td>
         </tr>
     </table>
 </body>

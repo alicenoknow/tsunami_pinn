@@ -182,12 +182,12 @@ def plot_color(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_x, n_
     ax.set_title(title)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    c = ax.pcolormesh(X, Y, Z, cmap=cmap, vmin=1, vmax=4)
+    c = ax.pcolormesh(X, Y, Z, cmap=cmap, vmin=0, vmax=3)
     fig.colorbar(c, ax=ax)
 
     return fig
 
-def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_x, n_points_t, length: float, floor: Callable, title: str, n_points_plot: int, figsize=(8, 6), dpi=100, limit=5):
+def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_x, n_points_t, length: float, floor: Callable, title: str, n_points_plot: int, figsize=(8, 6), dpi=100, limit=3):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
     z_raw = z.detach().cpu().numpy()
@@ -199,7 +199,7 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_x, n_poi
     ax.set_title(title)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.axes.set_zlim3d(bottom=-limit, top=limit)
+    ax.axes.set_zlim3d(bottom=0, top=limit)
 
     c = ax.plot_surface(X, Y, Z)
 
