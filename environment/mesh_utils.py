@@ -1,4 +1,5 @@
 import meshio
+import numpy as np
 import torch
 
 def dump_points(filename: str):
@@ -14,3 +15,13 @@ def dump_points(filename: str):
     z = (z - min_z) / (max_z - min_z)
 
     return x,y,z
+
+# TODO take x_val, y_val and z_val as arguments
+def floor(x, y, mesh):
+    x_val, y_val, z_val = dump_points(mesh)
+    indices = np.where((x_val == x) & (y_val == y))[0]
+
+    if len(indices) > 0:
+        return z_val[indices[0]]
+    else:
+        return None

@@ -19,7 +19,7 @@ class MeshEnvironment(SimulationEnvironment):
         self.initial_points = self.get_initial_points()
         self.boundary_points = self.get_boundary_points()
     
-    def get_initial_points(self,  n_points: int=None, requires_grad=True):
+    def get_initial_points(self, n_points: int=None, requires_grad=True):
         if n_points:
             return self.get_initial_points_n(n_points, requires_grad)
         x_raw, y_raw, _ = dump_points(self.mesh_filename)
