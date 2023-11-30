@@ -1,8 +1,6 @@
 from typing import Tuple
 from dataclasses import dataclass
 
-from utils.singleton import Singleton
-
 """
 For now I am making assumption that:
     1. x_domain == y_domain
@@ -11,7 +9,7 @@ For now I am making assumption that:
 
 """
 @dataclass
-class Domain(metaclass=Singleton):
+class Domain:
     XY_DOMAIN: Tuple[float, float] = (0, 1.0)
     T_DOMAIN: Tuple[float, float] = (0, 0.5)
 

@@ -28,7 +28,7 @@ class MeshEnvironment(SimulationEnvironment):
 
         x_grid = x_grid.reshape(-1, 1).to(self.device)
         y_grid = y_grid.reshape(-1, 1).to(self.device)
-        t0 = torch.full_like(x_grid, self.T_DOMAIN[0], requires_grad=requires_grad)
+        t0 = torch.full_like(x_grid, self.domain.T_DOMAIN[0], requires_grad=requires_grad)
 
         return (x_grid, y_grid, t0)
 

@@ -14,9 +14,9 @@ from environment.simple_env import SimpleEnvironment
 if __name__ == '__main__':
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("Running on: ", device)
+    print(":: running on", device)
 
-    params = SimulationParameters(LAYERS=8, NEURONS_PER_LAYER=180, RUN_NUM=1, EPOCHS=50_000)
+    params = SimulationParameters(LAYERS=8, NEURONS_PER_LAYER=180, RUN_NUM=1, EPOCHS=30_000)
     weights = Weights()
     pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)
     environment = SimpleEnvironment(device)

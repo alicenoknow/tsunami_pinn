@@ -12,7 +12,7 @@ from model.pinn import PINN
 from model.weights import Weights
 from train.params import SimulationParameters
 from visualization.plotting import create_gif, plot_initial_condition, plot_running_average, plot_simulation_by_frame
-from visualization.report import ReportContext, create_report
+from visualization.report import create_report
 
 
 class Training:
@@ -36,18 +36,19 @@ class Training:
 
         if self.params.VISUALIZE:
             run_num = self.params.RUN_NUM
+            mesh = self.params.MESH
             plot_running_average(loss_total, "Loss function (running average)", "total_loss", run_num)
             plot_running_average(loss_r, "Residual loss function (running average)", "residual_loss", run_num)
             plot_running_average(loss_i, "Initial loss function (running average)", "initial_loss", run_num)
             plot_running_average(loss_b, "Boundary loss function (running average)", "boundary_loss", run_num)
 
-            plot_initial_condition(self.environment, self.model, initial_condition, run_num, mesh=self.params.MESH)
-            plot_simulation_by_frame(self.model, self.environment, run_num, mesh=self.params.MESH)
+            plot_initial_condition(self.environment, self.model, initial_condition, run_num, mesh=mesh)
+            plot_simulation_by_frame(self.model, self.environment, run_num, mesh=mesh)
             create_gif(run_num, self.environment.domain.T_DOMAIN[1]) 
 
         if self.params.REPORT:
             losses = self.loss.verbose(self.model)
-            self.report(losses)
+            self.report(losses, mesh)
 
         return self.model, loss_total, loss_r, loss_i, loss_b
 
@@ -64,7 +65,8 @@ class Training:
                 loss: torch.Tensor = self.loss(self.model)
                 optimizer.zero_grad()
                 loss[0].backward()
-                torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5) # new
+                if self.params.CLIP_GRAD:
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
                 optimizer.step()
 
                 if self.params.SAVE_BEST_CLB:
@@ -117,7 +119,7 @@ class Training:
     def report(self, losses, mesh_name="-"):
         date = datetime.now()
 
-        context: ReportContext = {
+        context = {
                 'num': self.params.RUN_NUM,
                 'date': date,
                 'weight_r': self.weights.WEIGHT_RESIDUAL, 

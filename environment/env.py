@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from utils.singleton import Singleton
-
 class SimulationEnvironment(ABC):
     def __init__(self):
         self.domain = None

@@ -13,13 +13,14 @@ class SimulationParameters:
     EPOCHS: int = 200
     LEARNING_RATE: float = 0.00015
 
-    SAVE_BEST_CLB = True
-    VISUALIZE = True
-    REPORT = True
+    SAVE_BEST_CLB = False
+    VISUALIZE = False
+    REPORT = False
     CLIP_GRAD = False
 
     # Simulation params
     GRAVITY: float = 9.81
+    
     # MESH = None
     MESH = os.path.join("data", "val_square_UTM_translated_1.inp")
 
