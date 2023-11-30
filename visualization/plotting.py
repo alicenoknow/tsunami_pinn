@@ -119,10 +119,10 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: in
         z_floor = torch.zeros((n_points_plot, n_points_plot))
         for x_idx, _ in enumerate(x_floor):
             for y_idx, _ in enumerate(y_floor):
-                z_floor[x_idx, y_idx] = 0
+                z_floor[x_idx, y_idx] = 2
         x_floor = torch.tile(x_floor, (n_points_plot, 1))
         y_floor = torch.tile(y_floor, (n_points_plot, 1)).T
-        ax.plot_surface(x_floor, y_floor, z_floor, color='green', alpha=0.7)
+        ax.plot_surface(np.array(x_floor), np.array(y_floor), np.array(z_floor), color='green', alpha=0.7)
 
     return fig
 

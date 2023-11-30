@@ -1,5 +1,4 @@
 import torch
-import os
 
 from conditions.initial import initial_condition
 from environment.mesh_env import MeshEnvironment
@@ -11,16 +10,20 @@ from train.params import SimulationParameters
 from train.training import Training
 from environment.simple_env import SimpleEnvironment
 
+import os
+
 
 if __name__ == '__main__':
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Running on: ", device)
 
-    params = SimulationParameters(RUN_NUM=4, EPOCHS=50_000, LAYERS=6, NEURONS_PER_LAYER=200, MESH=os.path.join("data", "val_square_UTM_translated_3.inp"))
+    params = SimulationParameters(EPOCHS=1, RUN_NUM=1, SAVE_BEST_CLB=False)
     weights = Weights()
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
-    pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)
+
+    model = torch.load(os.path.join(f"results", f"run_{params.RUN_NUM}", f"best_{params.RUN_NUM}.pt"))
+
 
     loss = Loss(
         environment,
@@ -30,5 +33,7 @@ if __name__ == '__main__':
         wave_equation_simplified,
     )
 
-    training = Training(pinn, loss, params, environment, weights)
+    losses = loss.verbose(model)
+
+    training = Training(model, loss, params, environment, weights)
     _, loss, loss_r, loss_i, loss_b = training.start()
