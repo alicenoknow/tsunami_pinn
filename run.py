@@ -17,7 +17,7 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Running on: ", device)
 
-    params = SimulationParameters(RUN_NUM=0, EPOCHS=1, LAYERS=6, NEURONS_PER_LAYER=200, MESH=os.path.join("data", "val_square_UTM_translated_3.inp"))
+    params = SimulationParameters(RUN_NUM=5, EPOCHS=50_000, LAYERS=6, NEURONS_PER_LAYER=120, MESH=os.path.join("data", "val_square_UTM_translated_5.inp"))
     weights = Weights()
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
     pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)

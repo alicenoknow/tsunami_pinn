@@ -25,7 +25,7 @@ class Loss:
 
     def residual_loss(self, pinn: PINN):
         x, y, z, t = self.environment.interior_points
-        loss = self.wave_equation(pinn, x, y, z, t, self.params.GRAVITY)
+        loss = self.wave_equation(pinn, x, y, z, t, self.params.GRAVITY, self.environment)
 
         return loss.pow(2).mean()
 

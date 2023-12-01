@@ -3,7 +3,7 @@ import numpy as np
 
 from environment.domain import Domain
 from environment.env import SimulationEnvironment
-from environment.mesh_utils import dump_points
+from environment.mesh_utils import calculate_partial_derivatives, dump_points
 
 
 class MeshEnvironment(SimulationEnvironment):
@@ -15,14 +15,16 @@ class MeshEnvironment(SimulationEnvironment):
         self.device = device
         self.mesh_filename = mesh_filename
 
+        self.x_raw, self.y_raw, self.z_raw = dump_points(self.mesh_filename)
         self.interior_points = self.get_interior_points()
         self.initial_points = self.get_initial_points()
         self.boundary_points = self.get_boundary_points()
+        self.partial_x, self.partial_y = calculate_partial_derivatives(self.x_raw, self.y_raw, self.z_raw)
     
     def get_initial_points(self, n_points: int=None, requires_grad=True):
         if n_points:
             return self.get_initial_points_n(n_points, requires_grad)
-        x_raw, y_raw, _ = dump_points(self.mesh_filename)
+        x_raw, y_raw = self.x_raw, self.y_raw
         x_grid = x_raw.to(self.device)
         y_grid = y_raw.to(self.device)
         
@@ -84,7 +86,7 @@ class MeshEnvironment(SimulationEnvironment):
         return down, up, left, right
     
     def get_interior_points(self, requires_grad=True):
-        x_raw, y_raw, z_raw = dump_points(self.mesh_filename)
+        x_raw, y_raw, z_raw = self.x_raw, self.y_raw, self.z_raw
         t_raw = torch.linspace(self.domain.T_DOMAIN[0], self.domain.T_DOMAIN[1], steps=self.domain.T_POINTS)
         
         x_grid, t_grid = torch.meshgrid(x_raw, t_raw, indexing="ij")
