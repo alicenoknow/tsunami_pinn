@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List
 import numpy as np
 import os
+import time
 import torch
 from conditions.initial import initial_condition
 from environment.domain import Domain
@@ -28,27 +29,26 @@ class Training:
     
 
     def start(self):
+        start = time.time()
+        run_num = self.params.RUN_NUM
+        save_path = self.params.DIR
         self.create_run_directory()
+        print("Starting run: ", run_num)
 
         loss_total, loss_r, loss_i, loss_b = self.train()
 
         self.print_summary()
+        plot_running_average(save_path, loss_total, "Loss function (running average)", "total_loss", run_num)
+        plot_running_average(save_path, loss_r, "Residual loss function (running average)", "residual_loss", run_num)
+        plot_running_average(save_path, loss_i, "Initial loss function (running average)", "initial_loss", run_num)
+        plot_running_average(save_path, loss_b, "Boundary loss function (running average)", "boundary_loss", run_num)
 
         if self.params.VISUALIZE:
-            run_num = self.params.RUN_NUM
-            mesh = self.params.MESH
-            plot_running_average(loss_total, "Loss function (running average)", "total_loss", run_num)
-            plot_running_average(loss_r, "Residual loss function (running average)", "residual_loss", run_num)
-            plot_running_average(loss_i, "Initial loss function (running average)", "initial_loss", run_num)
-            plot_running_average(loss_b, "Boundary loss function (running average)", "boundary_loss", run_num)
-
-            plot_initial_condition(self.environment, self.model, initial_condition, run_num, mesh=mesh)
-            plot_simulation_by_frame(self.model, self.environment, run_num, mesh=mesh)
-            create_gif(run_num, self.environment.domain.T_DOMAIN[1]) 
+            self.visualize_results()
 
         if self.params.REPORT:
             losses = self.loss.verbose(self.model)
-            self.report(losses, mesh)
+            self.report(losses, time.time()-start)
 
         return self.model, loss_total, loss_r, loss_i, loss_b
 
@@ -84,7 +84,22 @@ class Training:
                 break
 
         return np.array(loss_values), np.array(residual_loss_values), np.array(initial_loss_values), np.array(boundary_loss_values)
+    
+    def evaluate(self):
+        self.create_run_directory()
+        self.train()
+        self.print_summary()
+        self.visualize_results()
 
+
+    def visualize_results(self):
+        mesh = self.params.MESH
+        run_num = self.params.RUN_NUM
+        save_path = self.params.DIR
+        plot_initial_condition(save_path, self.environment, self.model, initial_condition, run_num, mesh=mesh)
+        plot_simulation_by_frame(save_path, self.model, self.environment, run_num, mesh=mesh)
+        create_gif(save_path, run_num, self.environment.domain.T_DOMAIN[1]) 
+        
 
     def print_summary(self):
         losses = self.loss.verbose(self.model)
@@ -105,7 +120,7 @@ class Training:
 
     def create_run_directory(self):
         try:
-            os.makedirs(os.path.join(f"results", f"run_{self.params.RUN_NUM}", "img"), exist_ok=True)
+            os.makedirs(os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", "img"), exist_ok=True)
             print(f"Run directory created successfully.")
         except OSError as error:
             print(f"Run directory creation failed: {error}")
@@ -113,15 +128,15 @@ class Training:
 
     def save_best_callback(self, loss: float):
         if loss < self.best_loss:
-            torch.save(self.model, os.path.join("results", f"run_{self.params.RUN_NUM}", f"best_{self.params.RUN_NUM}.pt"))
+            torch.save(self.model, os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", f"best_{self.params.RUN_NUM}.pt"))
             self.best_loss = loss
 
-    def report(self, losses, mesh_name="-"):
+    def report(self, losses, time=0.0):
         date = datetime.now()
 
         context = {
                 'num': self.params.RUN_NUM,
-                'date': date,
+                'date': date.strftime("%Y-%m-%d %H:%M:%S"),
                 'weight_r': self.weights.WEIGHT_RESIDUAL, 
                 'weight_i': self.weights.WEIGHT_INITIAL, 
                 'weight_b': self.weights.WEIGHT_BOUNDARY,
@@ -133,14 +148,16 @@ class Training:
                 "residual_loss": f"{losses[1]:.3E}",
                 "initial_loss": f"{losses[2]:.3E}",
                 "boundary_loss": f"{losses[3]:.3E}",
-                "img_loss": os.path.join("results", f"run_{self.params.RUN_NUM}", "total_loss.png"),
-                "img_loss_r": os.path.join("results", f"run_{self.params.RUN_NUM}", "residual_loss.png"),
-                "img_loss_i": os.path.join("results", f"run_{self.params.RUN_NUM}", "initial_loss.png"),
-                "img_loss_b": os.path.join("results", f"run_{self.params.RUN_NUM}", "boundary_loss.png"),
-                "mesh_name": mesh_name,
+                "img_loss": os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", "total_loss.png"),
+                "img_loss_r": os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", "residual_loss.png"),
+                "img_loss_i": os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", "initial_loss.png"),
+                "img_loss_b": os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", "boundary_loss.png"),
+                "mesh_name": self.params.MESH if self.params.MESH else "-",
+                "time": time
             }
 
+        report_path = os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", f"report_{self.params.RUN_NUM}.pdf")
         create_report(context,
                     env_path='.',
                     template_path='report_template.html',
-                    report_title=f"report_{self.params.RUN_NUM}.pdf")
+                    report_title=report_path)

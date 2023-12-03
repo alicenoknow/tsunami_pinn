@@ -41,7 +41,6 @@ def dfdy(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, t: torch.Tensor, u:Unio
 # Simplified for z(x,y) = 0
 def wave_equation_simplified(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, t: torch.Tensor, G: float, _env: "SimulationEnvironment"):
     u = f(pinn, x, y, t)
-
     return dfdt(pinn, x, y, t, u, order=2) - \
         G * (dfdx(pinn, x, y, t, u) ** 2 + \
         (u-z) * dfdx(pinn, x, y, t, u, order=2) + \
@@ -51,9 +50,8 @@ def wave_equation_simplified(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, z: 
 
 def wave_equation(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, t: torch.Tensor, G: float,  env: "SimulationEnvironment"):
     u = f(pinn, x, y, t)
-
-    dzdx = env.partial_x(x,y)
-    dzdy = env.partial_y(x,y)
+    dzdx = env.partial_x(x,y).to(env.device)
+    dzdy = env.partial_y(x,y).to(env.device)
 
     return dfdt(pinn, x, y, t, u, order=2) - \
         G * ((dfdx(pinn, x, y, t, u) - dzdx) * \
@@ -62,4 +60,3 @@ def wave_equation(pinn: "PINN", x: torch.Tensor, y: torch.Tensor, z: torch.Tenso
         (dfdy(pinn, x, y, t, u) - dzdy) * \
         dfdy(pinn, x, y, t, u) + \
         (u-z) * dfdy(pinn, x, y, t, u, order=2))
-        

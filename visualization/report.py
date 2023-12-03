@@ -36,5 +36,5 @@ def create_report(context: ReportContext,
     template = template_env.get_template(template_path)
     output_text = template.render(context)
     
-    with open(os.path.join("results", f"run_{context['num']}", f"{report_title}"), "w+b") as out_pdf_file_handle:
+    with open(os.path.join(report_title), "w+b") as out_pdf_file_handle:
         pisa.CreatePDF(src=output_text, dest=out_pdf_file_handle)

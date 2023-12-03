@@ -31,6 +31,7 @@ class Loss:
 
     def initial_loss(self, pinn: PINN):
         x, y, t = self.environment.initial_points
+
         length = self.environment.domain.XY_DOMAIN[1]
         pinn_init = self.initial_condition(x, y, length)
         loss = f(pinn, x, y, t) - pinn_init
@@ -39,10 +40,12 @@ class Loss:
 
     def boundary_loss(self, pinn: PINN):
         down, up, left, right = self.environment.boundary_points
+
         x_down,  y_down,  t_down    = down
         x_up,    y_up,    t_up      = up
         x_left,  y_left,  t_left    = left
         x_right, y_right, t_right   = right
+
 
         loss_down  = dfdy( pinn, x_down,  y_down,  t_down  )
         loss_up    = dfdy( pinn, x_up,    y_up,    t_up    )

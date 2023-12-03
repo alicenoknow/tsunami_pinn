@@ -1,16 +1,17 @@
 import torch
+import os
+import sys
 
 from conditions.initial import initial_condition
 from environment.mesh_env import MeshEnvironment
 from loss.loss import Loss
-from loss.wave_equations import wave_equation_simplified
+from loss.wave_equations import wave_equation, wave_equation_simplified
 from model.pinn import PINN
 from model.weights import Weights
 from train.params import SimulationParameters
 from train.training import Training
 from environment.simple_env import SimpleEnvironment
 
-import os
 
 
 if __name__ == '__main__':
@@ -18,22 +19,24 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Running on: ", device)
 
-    params = SimulationParameters(EPOCHS=1, RUN_NUM=1, SAVE_BEST_CLB=False)
+    run_num = sys.argv[1]
+    model_path = sys.argv[2]
+    mesh_path = sys.argv[3]
+    results_dir = sys.argv[4]
+
+    params = SimulationParameters(RUN_NUM=run_num, MESH=mesh_path, DIR=results_dir, EPOCHS=0)
     weights = Weights()
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
-
-    model = torch.load(os.path.join(f"results", f"run_{params.RUN_NUM}", f"best_{params.RUN_NUM}.pt"))
-
+    pinn = torch.load(model_path).cuda()
 
     loss = Loss(
         environment,
         weights,
         params,
         initial_condition,
-        wave_equation_simplified,
+        wave_equation=wave_equation if params.MESH else wave_equation_simplified,
     )
 
-    losses = loss.verbose(model)
+    training = Training(pinn, loss, params, environment, weights)
+    training.evaluate()
 
-    training = Training(model, loss, params, environment, weights)
-    _, loss, loss_r, loss_i, loss_b = training.start()

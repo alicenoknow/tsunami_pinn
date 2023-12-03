@@ -34,7 +34,7 @@ def floor(x, y, mesh):
 
 
 def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Tensor):
-    x,y,z  = np.array(x), np.array(y), np.array(z)
+    x,y,z = x.detach().numpy(), y.detach().numpy(), z.detach().numpy()
 
     degree = 3
     poly_features = PolynomialFeatures(degree=degree)
@@ -53,7 +53,6 @@ def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Ten
     xy_poly = poly_features.transform(xy_mesh)
 
     z_mesh_flat = lin_reg.predict(xy_poly)
-    z_mesh = z_mesh_flat.reshape(x_mesh.shape)
 
     coefficients = lin_reg.coef_
     intercept = lin_reg.intercept_

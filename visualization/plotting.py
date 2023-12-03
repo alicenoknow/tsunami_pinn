@@ -5,29 +5,29 @@ import torch
 import os
 
 from matplotlib.animation import FuncAnimation
-from typing import List, Callable
-from environment.domain import Domain
+from typing import Callable
 from environment.env import SimulationEnvironment
 from environment.mesh_utils import dump_points
 
 from model.pinn import PINN
-from train.params import SimulationParameters
 
         
-def create_gif(run: int,
+def create_gif(save_path: str,
+               run: int,
                total_time: float, 
                step: float=0.01, 
                duration: float=0.1) -> None:
     time_values = np.arange(0, total_time, step)
     frames = []
     for idx in range(len(time_values)):
-        image = imageio.v2.imread(os.path.join("results", f"run_{run}", "img", "img_{:03d}.png".format(idx)))
+        image = imageio.v2.imread(os.path.join(save_path, f"run_{run}", "img", "img_{:03d}.png".format(idx)))
         frames.append(image)
 
-    imageio.mimsave(os.path.join("results", f"run_{run}", f"tsunami_{run}.gif"), frames, duration=duration)
+    imageio.mimsave(os.path.join(save_path, f"run_{run}", f"tsunami_{run}.gif"), frames, duration=duration)
 
 
-def plot_initial_condition(environment: SimulationEnvironment,
+def plot_initial_condition(save_path: str,
+                          environment: SimulationEnvironment,
                           pinn: PINN,
                           initial_condition: Callable,
                           run_num: int,
@@ -73,7 +73,7 @@ def plot_initial_condition(environment: SimulationEnvironment,
     ax.matshow(a)
 
     plt.tight_layout()
-    plt.savefig(os.path.join("results", f"run_{run_num}", "initial.png"))
+    plt.savefig(os.path.join(save_path, f"run_{run_num}", "initial.png"))
 
 
 def plot_color(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, title, figsize=(8, 6), dpi=100, cmap="viridis"):
@@ -117,16 +117,17 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: in
         x_floor = torch.linspace(0.0, length, steps=n_points_plot)
         y_floor = torch.linspace(0.0, length, steps=n_points_plot)
         z_floor = torch.zeros((n_points_plot, n_points_plot))
-        for x_idx, _ in enumerate(x_floor):
-            for y_idx, _ in enumerate(y_floor):
-                z_floor[x_idx, y_idx] = 2
+        # for x_idx, _ in enumerate(x_floor):
+        #     for y_idx, _ in enumerate(y_floor):
+        #         z_floor[x_idx, y_idx] = 0
         x_floor = torch.tile(x_floor, (n_points_plot, 1))
         y_floor = torch.tile(y_floor, (n_points_plot, 1)).T
         ax.plot_surface(np.array(x_floor), np.array(y_floor), np.array(z_floor), color='green', alpha=0.7)
 
     return fig
 
-def plot_frame(environment: SimulationEnvironment,
+def plot_frame(save_path: str,
+                environment: SimulationEnvironment,
                 pinn: PINN,
                 run_num: int,
                 idx: int,
@@ -141,11 +142,12 @@ def plot_frame(environment: SimulationEnvironment,
     z = pinn(x, y, t)
     fig1 = plot_color(z, x, y, n_points_plot, f"PINN for t = {t_value}")
     fig2 = plot_3D(z, x, y, n_points_plot, length, mesh, f"PINN for t = {t_value}")
-    plt.savefig(os.path.join("results", f"run_{run_num}", "img", "img_{:03d}.png".format(idx)))
+    plt.savefig(os.path.join(save_path, f"run_{run_num}", "img", "img_{:03d}.png".format(idx)))
     plt.close(fig1)
     plt.close(fig2)
 
-def plot_simulation_by_frame(pinn: PINN, 
+def plot_simulation_by_frame(save_path: str,
+                             pinn: PINN, 
                              environment: SimulationEnvironment,
                              run_num: int,
                              time_step:float=0.01,
@@ -154,7 +156,8 @@ def plot_simulation_by_frame(pinn: PINN,
     time_values = np.arange(0, t_max, time_step)
 
     for idx, t_value in enumerate(time_values):
-        plot_frame(environment=environment,
+        plot_frame(save_path=save_path,
+                   environment=environment,
                    pinn=pinn,
                    run_num=run_num,
                    idx=idx,
@@ -165,7 +168,7 @@ def running_average(y, window: int=100):
     cumsum = np.cumsum(np.insert(y, 0, 0))
     return (cumsum[window:] - cumsum[:-window]) / float(window)
 
-def plot_running_average(loss_values, title: str, path: str, run_num: int):
+def plot_running_average(save_path: str, loss_values, title: str, path: str, run_num: int):
     average_loss = running_average(loss_values, window=100)
     fig, ax = plt.subplots(figsize=(8, 6), dpi=100)
     ax.set_title(title)
@@ -174,4 +177,4 @@ def plot_running_average(loss_values, title: str, path: str, run_num: int):
     ax.plot(average_loss)
     ax.set_yscale('log')
     
-    fig.savefig(os.path.join("results", f"run_{run_num}", f"{path}.png"))
+    fig.savefig(os.path.join(save_path, f"run_{run_num}", f"{path}.png"))
