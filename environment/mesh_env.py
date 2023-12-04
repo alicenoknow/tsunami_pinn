@@ -49,7 +49,8 @@ class MeshEnvironment(SimulationEnvironment):
         t0 = torch.full_like(x_grid, self.domain.T_DOMAIN[0], requires_grad=requires_grad)
         return (x_grid, y_grid, t0)
 
-    def get_boundary_points(self, requires_grad=True):
+
+    def get_boundary_points(self, n_points=None, requires_grad=True):
         """
             .+------+
           .' |    .'|
@@ -60,7 +61,7 @@ class MeshEnvironment(SimulationEnvironment):
          +------+'
             x
         """
-        x_linspace, y_linspace, t_linspace = self._generate_linespaces_n(int(np.sqrt(self.domain.N_POINTS)))
+        x_linspace, y_linspace, t_linspace = self._generate_linespaces_n(n_points)
 
         x_grid, t_grid = torch.meshgrid(x_linspace, t_linspace, indexing="ij")
         y_grid, _      = torch.meshgrid(y_linspace, t_linspace, indexing="ij")
@@ -120,8 +121,9 @@ class MeshEnvironment(SimulationEnvironment):
     def _generate_linespaces_n(self, n: int, requires_grad=False):
         x_domain, y_domain, t_domain = self.domain.XY_DOMAIN, self.domain.XY_DOMAIN, self.domain.T_DOMAIN
         x_points, y_points, t_points = n, n, self.domain.T_POINTS
+        n_points_linspace = n if n else self.domain.N_POINTS
 
-        x_linspace = torch.linspace(x_domain[0], x_domain[1], steps=x_points, requires_grad=requires_grad)
-        y_linspace = torch.linspace(y_domain[0], y_domain[1], steps=y_points, requires_grad=requires_grad)
+        x_linspace = torch.linspace(x_domain[0], x_domain[1], steps=n_points_linspace, requires_grad=requires_grad)
+        y_linspace = torch.linspace(y_domain[0], y_domain[1], steps=n_points_linspace, requires_grad=requires_grad)
         t_linspace = torch.linspace(t_domain[0], t_domain[1], steps=t_points, requires_grad=requires_grad)
         return x_linspace, y_linspace, t_linspace

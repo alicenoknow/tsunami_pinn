@@ -21,12 +21,12 @@ if __name__ == '__main__':
     print("Running on: ", device)
     run_num = 0
 
-    for run_num in range(9,11):
+    for run_num in range(0,1):
 
-        params = SimulationParameters(RUN_NUM=run_num, EPOCHS=60_000, NEURONS_PER_LAYER=160, LAYERS=6,  MESH=os.path.join("data", f"val_square_UTM_translated_{run_num}.inp"))
+        params = SimulationParameters(RUN_NUM=run_num, EPOCHS=60_000, NEURONS_PER_LAYER=160, LAYERS=6,  MESH=os.path.join("data", f"val_square_UTM_translated_{run_num+5}.inp"))
         # params = SimulationParameters(RUN_NUM=run_num, EPOCHS=80_000, NEURONS_PER_LAYER=150, LAYERS=6, MESH=None)
 
-        weights = Weights(WEIGHT_INITIAL=10, WEIGHT_RESIDUAL=0.1, WEIGHT_BOUNDARY=0.01)
+        weights = Weights(WEIGHT_INITIAL=10, WEIGHT_RESIDUAL=0.1, WEIGHT_BOUNDARY=0.05)
         environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
         pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)
         # pinn = torch.load(os.path.join(f"results", f"run_{run_num}", f"best_{run_num}.pt"))

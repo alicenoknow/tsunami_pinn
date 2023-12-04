@@ -46,7 +46,6 @@ class Loss:
         x_left,  y_left,  t_left    = left
         x_right, y_right, t_right   = right
 
-
         loss_down  = dfdy( pinn, x_down,  y_down,  t_down  )
         loss_up    = dfdy( pinn, x_up,    y_up,    t_up    )
         loss_left  = dfdx( pinn, x_left,  y_left,  t_left  )
