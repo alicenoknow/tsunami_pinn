@@ -5,13 +5,15 @@ import torch
 import os
 
 from matplotlib.animation import FuncAnimation
-from typing import Callable
+from mayavi import mlab
+from typing import Callable, Optional
 from environment.env import SimulationEnvironment
 from environment.mesh_utils import dump_points
 
 from model.pinn import PINN
 
-        
+use_mayavi = True
+
 def create_gif(save_path: str,
                run: int,
                total_time: float, 
@@ -92,7 +94,7 @@ def plot_color(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot:
 
     return fig
 
-def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, length: int, mesh_file: str, title: str, figsize=(8, 6), limit=4):
+def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, length: int, mesh_file: Optional[str], title: str, figsize=(8, 6), limit=1):  
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
     z_raw = z.detach().cpu().numpy()
@@ -105,12 +107,12 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: in
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.axes.set_zlim3d(bottom=0, top=limit)
-    ax.plot_surface(X, Y, Z)
+    ax.plot_surface(X, Y, Z, alpha=0.8)
 
     if mesh_file is not None:
         # based on mesh file
         x_floor, y_floor, z_floor = dump_points(mesh_file)
-        ax.plot_trisurf(x_floor, y_floor, z_floor, linewidth=0.2)
+        ax.plot_trisurf(x_floor, y_floor, z_floor, linewidth=0.2, alpha=0.8)
 
     else:
         # based on floor function
@@ -122,8 +124,44 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: in
         #         z_floor[x_idx, y_idx] = 0
         x_floor = torch.tile(x_floor, (n_points_plot, 1))
         y_floor = torch.tile(y_floor, (n_points_plot, 1)).T
-        ax.plot_surface(np.array(x_floor), np.array(y_floor), np.array(z_floor), color='green', alpha=0.7)
+        ax.plot_surface(np.array(x_floor), np.array(y_floor), np.array(z_floor), color='green', alpha=0.8)
 
+    return fig
+
+def plot_3D_mayavi(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, length: int, mesh_file: str, title: str, limit=1):
+    fig = mlab.figure(figure=None, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), engine=None, size=(700, 700))
+    
+    z_raw = z.detach().cpu().numpy()
+    x_raw = x.detach().cpu().numpy()
+    y_raw = y.detach().cpu().numpy()
+    X = x_raw.reshape(n_points_plot, n_points_plot)
+    Y = y_raw.reshape(n_points_plot, n_points_plot)
+    Z = z_raw.reshape(n_points_plot, n_points_plot)
+    
+    mlab.surf(X, Y, Z, color=(0.01, 0.27, 0.92), opacity=0.8, warp_scale=0.5)
+
+    if mesh_file is not None:
+        # based on mesh file
+        import meshio
+        mesh = meshio.avsucd.read(mesh_file)
+        vx, vy, vz = dump_points(mesh_file)
+        triangles = mesh.cells_dict['triangle']
+        mlab.triangular_mesh(vx, vy, vz, triangles, color=(0.88,0.75,0.05),)
+        mlab.triangular_mesh(vx, vy, vz, triangles, representation='wireframe')
+
+    else:
+        # based on floor function
+        x_floor = torch.linspace(0.0, length, steps=n_points_plot)
+        y_floor = torch.linspace(0.0, length, steps=n_points_plot)
+        z_floor = torch.zeros((n_points_plot, n_points_plot))
+        mlab.surf(x_floor, y_floor, z_floor, color=(1, 0.8, 0), opacity=0.8)
+
+    # mlab.title(title)
+    mlab.xlabel("x")
+    mlab.ylabel("y")
+    mlab.zlabel("z")
+    mlab.axes(color=(0, 0, 0), extent=[0, 1, 0, 1, 0, 3])
+    mlab.view(distance=7)
     return fig
 
 def plot_frame(save_path: str,
@@ -143,6 +181,8 @@ def plot_frame(save_path: str,
     fig1 = plot_color(z, x, y, n_points_plot, f"PINN for t = {t_value}")
     fig2 = plot_3D(z, x, y, n_points_plot, length, mesh, f"PINN for t = {t_value}")
     plt.savefig(os.path.join(save_path, f"run_{run_num}", "img", "img_{:03d}.png".format(idx)))
+    # mlab.savefig(os.path.join(save_path, f"run_{run_num}", "img", "img_{:03d}.png".format(idx)))
+    # plt.show()
     plt.close(fig1)
     plt.close(fig2)
 

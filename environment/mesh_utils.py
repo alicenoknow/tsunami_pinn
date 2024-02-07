@@ -17,8 +17,8 @@ def dump_points(filename: str):
 
     x = (x - min_x) / (max_x - min_x)
     y = (y - min_y) / (max_y - min_y)
-    z = (z - min_z) / (max_z - min_z)
-
+    z = (z - min_z) / (max_x - min_x)
+    z *= 10 # for better visibility
     return x,y,z
 
 # TODO take x_val, y_val and z_val as arguments
@@ -30,8 +30,6 @@ def floor(x, y, mesh):
         return z_val[indices[0]]
     else:
         return None
-    
-
 
 def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Tensor):
     x,y,z = x.detach().numpy(), y.detach().numpy(), z.detach().numpy()
