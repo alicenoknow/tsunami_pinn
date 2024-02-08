@@ -5,14 +5,14 @@ import torch
 import os
 
 from matplotlib.animation import FuncAnimation
-from mayavi import mlab
+# from mayavi import mlab
 from typing import Callable, Optional
 from environment.env import SimulationEnvironment
 from environment.mesh_utils import dump_points
 
 from model.pinn import PINN
 
-use_mayavi = True
+# use_mayavi = True
 
 def create_gif(save_path: str,
                run: int,
@@ -128,41 +128,41 @@ def plot_3D(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: in
 
     return fig
 
-def plot_3D_mayavi(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, length: int, mesh_file: str, title: str, limit=1):
-    fig = mlab.figure(figure=None, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), engine=None, size=(700, 700))
+# def plot_3D_mayavi(z: torch.Tensor, x: torch.Tensor, y: torch.Tensor, n_points_plot: int, length: int, mesh_file: str, title: str, limit=1):
+#     fig = mlab.figure(figure=None, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), engine=None, size=(700, 700))
     
-    z_raw = z.detach().cpu().numpy()
-    x_raw = x.detach().cpu().numpy()
-    y_raw = y.detach().cpu().numpy()
-    X = x_raw.reshape(n_points_plot, n_points_plot)
-    Y = y_raw.reshape(n_points_plot, n_points_plot)
-    Z = z_raw.reshape(n_points_plot, n_points_plot)
+#     z_raw = z.detach().cpu().numpy()
+#     x_raw = x.detach().cpu().numpy()
+#     y_raw = y.detach().cpu().numpy()
+#     X = x_raw.reshape(n_points_plot, n_points_plot)
+#     Y = y_raw.reshape(n_points_plot, n_points_plot)
+#     Z = z_raw.reshape(n_points_plot, n_points_plot)
     
-    mlab.surf(X, Y, Z, color=(0.01, 0.27, 0.92), opacity=0.8, warp_scale=0.5)
+#     mlab.surf(X, Y, Z, color=(0.01, 0.27, 0.92), opacity=0.8, warp_scale=0.5)
 
-    if mesh_file is not None:
-        # based on mesh file
-        import meshio
-        mesh = meshio.avsucd.read(mesh_file)
-        vx, vy, vz = dump_points(mesh_file)
-        triangles = mesh.cells_dict['triangle']
-        mlab.triangular_mesh(vx, vy, vz, triangles, color=(0.88,0.75,0.05),)
-        mlab.triangular_mesh(vx, vy, vz, triangles, representation='wireframe')
+#     if mesh_file is not None:
+#         # based on mesh file
+#         import meshio
+#         mesh = meshio.avsucd.read(mesh_file)
+#         vx, vy, vz = dump_points(mesh_file)
+#         triangles = mesh.cells_dict['triangle']
+#         mlab.triangular_mesh(vx, vy, vz, triangles, color=(0.88,0.75,0.05),)
+#         mlab.triangular_mesh(vx, vy, vz, triangles, representation='wireframe')
 
-    else:
-        # based on floor function
-        x_floor = torch.linspace(0.0, length, steps=n_points_plot)
-        y_floor = torch.linspace(0.0, length, steps=n_points_plot)
-        z_floor = torch.zeros((n_points_plot, n_points_plot))
-        mlab.surf(x_floor, y_floor, z_floor, color=(1, 0.8, 0), opacity=0.8)
+#     else:
+#         # based on floor function
+#         x_floor = torch.linspace(0.0, length, steps=n_points_plot)
+#         y_floor = torch.linspace(0.0, length, steps=n_points_plot)
+#         z_floor = torch.zeros((n_points_plot, n_points_plot))
+#         mlab.surf(x_floor, y_floor, z_floor, color=(1, 0.8, 0), opacity=0.8)
 
-    # mlab.title(title)
-    mlab.xlabel("x")
-    mlab.ylabel("y")
-    mlab.zlabel("z")
-    mlab.axes(color=(0, 0, 0), extent=[0, 1, 0, 1, 0, 3])
-    mlab.view(distance=7)
-    return fig
+#     # mlab.title(title)
+#     mlab.xlabel("x")
+#     mlab.ylabel("y")
+#     mlab.zlabel("z")
+#     mlab.axes(color=(0, 0, 0), extent=[0, 1, 0, 1, 0, 3])
+#     mlab.view(distance=7)
+#     return fig
 
 def plot_frame(save_path: str,
                 environment: SimulationEnvironment,

@@ -9,7 +9,7 @@ import os
 import sys
 import torch
 
-
+# sample initial cond
 def initial_condition(x: torch.Tensor, y: torch.Tensor, xy_length: float) -> torch.Tensor:
     base_height = 0.5
     alpha = 120

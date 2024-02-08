@@ -62,7 +62,7 @@ class Training:
 
         for epoch in range(self.params.EPOCHS):
             try:
-                loss: torch.Tensor = self.loss(self.model)
+                loss: torch.Tensor = self.loss(self.model, epoch)
                 optimizer.zero_grad()
                 loss[0].backward()
                 if self.params.CLIP_GRAD:
@@ -88,6 +88,7 @@ class Training:
     def evaluate(self):
         self.create_run_directory()
         self.train()
+        self.load_best()
         self.print_summary()
         self.visualize_results()
 
@@ -125,6 +126,9 @@ class Training:
         except OSError as error:
             print(f"Run directory creation failed: {error}")
     
+    def load_best(self):
+        path_best = os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}", f"best_{self.params.RUN_NUM}.pt")
+        self.model = torch.load(path_best).cuda()
 
     def save_best_callback(self, loss: float):
         if loss < self.best_loss:

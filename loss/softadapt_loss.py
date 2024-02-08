@@ -1,4 +1,6 @@
+import torch
 from typing import Callable
+from softadapt import SoftAdapt, NormalizedSoftAdapt, LossWeightedSoftAdapt
 
 from environment.env import SimulationEnvironment
 from loss.wave_equations import dfdx, dfdy, f
@@ -7,7 +9,7 @@ from model.weights import Weights
 from train.params import SimulationParameters
 
 
-class Loss:
+class SoftAdaptLoss:
     def __init__(
         self,
         environment: SimulationEnvironment,
@@ -15,6 +17,7 @@ class Loss:
         params: SimulationParameters,
         initial_condition: Callable,
         wave_equation: Callable,
+        beta: float = 0.1
     ):
         self.environment = environment
         self.weights = weights
@@ -22,6 +25,15 @@ class Loss:
 
         self.wave_equation = wave_equation
         self.initial_condition = initial_condition
+
+        # SoftAdapt https://github.com/dr-aheydari/SoftAdapt
+        self.softadapt_object = LossWeightedSoftAdapt(beta=beta)
+        self.epochs_to_make_updates = 5
+        self.initial_history = []
+        self.residual_history = []
+        self.boundary_history = []
+        self.adaptive_weights = torch.tensor([50,1,1])
+
 
     def residual_loss(self, pinn: PINN):
         x, y, z, t = self.environment.interior_points
@@ -56,7 +68,7 @@ class Loss:
             loss_left.pow(2).mean()  + \
             loss_right.pow(2).mean()
 
-    def verbose(self, pinn: PINN):
+    def verbose(self, pinn: PINN, epoch: int = 0):
         """
         Returns all parts of the loss function
 
@@ -66,14 +78,26 @@ class Loss:
         initial_loss = self.initial_loss(pinn)
         boundary_loss = self.boundary_loss(pinn)
 
-        final_loss = \
-            self.weights.WEIGHT_RESIDUAL * residual_loss + \
-            self.weights.WEIGHT_INITIAL * initial_loss + \
-            self.weights.WEIGHT_BOUNDARY * boundary_loss
+        self.initial_history.append(initial_loss)
+        self.residual_history.append(residual_loss)
+        self.boundary_history.append(boundary_loss)
+
+        if epoch % self.epochs_to_make_updates == 0 and epoch != 0:
+            self.adaptive_weights = self.softadapt_object.get_component_weights(torch.tensor(self.initial_history), 
+                                                                 torch.tensor(self.residual_history), 
+                                                                 torch.tensor(self.boundary_history),
+                                                                 verbose=False)
+            self.initial_history = []
+            self.residual_history = []
+            self.boundary_history = []
+      
+        final_loss = self.adaptive_weights[0] * initial_loss \
+                    + self.adaptive_weights[1] * residual_loss \
+                    + self.adaptive_weights[2] * boundary_loss
 
         return final_loss, residual_loss, initial_loss, boundary_loss
 
-    def __call__(self, pinn: PINN, epoch=None):
+    def __call__(self, pinn: PINN, epoch: int = 0):
         """
         Allows you to use the instance of this class as if it were a function:
 
@@ -82,4 +106,4 @@ class Loss:
             >>> calculated_loss = loss(pinn)
         ```
         """
-        return self.verbose(pinn)
+        return self.verbose(pinn, epoch)

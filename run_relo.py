@@ -3,7 +3,7 @@ import os
 
 from conditions.initial import initial_condition
 from environment.mesh_env import MeshEnvironment
-from loss.loss import Loss
+from loss.relo_loss import ReloLoss
 from loss.wave_equations import wave_equation, wave_equation_simplified
 from model.pinn import PINN
 from model.weights import Weights
@@ -19,18 +19,19 @@ if __name__ == '__main__':
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Running on: ", device)
+    run_num = 33
 
-    for run_num in range(60,61):
+    for _ in range(0,1):
 
-        # params = SimulationParameters(RUN_NUM=run_num, EPOCHS=150_000, NEURONS_PER_LAYER=300, LAYERS=3,  MESH=os.path.join("data", f"val_square_UTM_translated_{run_num}.inp"))
-        params = SimulationParameters(RUN_NUM=run_num, EPOCHS=150_000, NEURONS_PER_LAYER=300, LAYERS=3, MESH=None)
+        # params = SimulationParameters(RUN_NUM=run_num+40, EPOCHS=150_000, NEURONS_PER_LAYER=300, LAYERS=3,  MESH=os.path.join("data", f"val_square_UTM_translated_{run_num}.inp"))
+        params = SimulationParameters(RUN_NUM=run_num, EPOCHS=450_000, NEURONS_PER_LAYER=300, LAYERS=4, MESH=None)
 
-        weights = Weights(WEIGHT_INITIAL=5.0, WEIGHT_RESIDUAL=0.1, WEIGHT_BOUNDARY=0.1)
+        weights = Weights()
         environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
         pinn = PINN(params.LAYERS, params.NEURONS_PER_LAYER, device).to(device)
         # pinn = torch.load(os.path.join(f"results", f"run_{run_num}", f"best_{run_num}.pt"))
 
-        loss = Loss(
+        loss = ReloLoss(
             environment,
             weights,
             params,
