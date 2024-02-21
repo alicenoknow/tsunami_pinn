@@ -19,7 +19,7 @@ if __name__ == '__main__':
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Running on: ", device)
-    run_num = 34
+    run_num = 35
 
     for _ in range(0,1):
 

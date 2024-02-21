@@ -78,12 +78,12 @@ class MixLoss:
         initial_loss = self.initial_loss(pinn)
         boundary_loss = self.boundary_loss(pinn)
 
-        if epoch > 29995:
+        if epoch < 29996:
             self.initial_history.append(initial_loss)
             self.residual_history.append(residual_loss)
             self.boundary_history.append(boundary_loss)
 
-        if epoch > 30_000 and epoch % self.epochs_to_make_updates == 0:
+        if epoch < 30_000 and epoch % self.epochs_to_make_updates == 0 and epoch != 0:
             self.adaptive_weights = self.softadapt_object.get_component_weights(torch.tensor(self.initial_history), 
                                                                 torch.tensor(self.residual_history), 
                                                                 torch.tensor(self.boundary_history),

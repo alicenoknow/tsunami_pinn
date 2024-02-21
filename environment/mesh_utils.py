@@ -16,9 +16,9 @@ def dump_points(filename: str):
     max_x, max_y, max_z = torch.max(x), torch.max(y), torch.max(z)
 
     x = (x - min_x) / (max_x - min_x)
-    y = (y - min_y) / (max_y - min_y)
+    y = (y - min_y) / (max_x - min_x)
     z = (z - min_z) / (max_x - min_x)
-    z *= 10 # for better visibility
+    z += 0.5 # for better visibility
     return x,y,z
 
 # TODO take x_val, y_val and z_val as arguments
