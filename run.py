@@ -40,10 +40,12 @@ def setup_params(params):
 
 def setup_logger(params):
     log_format = '[%(levelname)s] %(message)s'
+    log_dir = os.path.join(params.DIR, f"run_{params.RUN_NUM}")
+    os.makedirs(log_dir, exist_ok=True)
+
     file_handler = logging.FileHandler(
         os.path.join(
-            params.DIR,
-            f"run_{params.RUN_NUM}",
+            log_dir,
             "run.log"),
         "w")
     file_handler.setLevel(logging.INFO)
