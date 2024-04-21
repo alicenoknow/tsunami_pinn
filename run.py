@@ -30,7 +30,14 @@ def setup_params(params):
     parser.add_argument('--config', help='JSON config file name')
 
     for field in fields(SimulationParameters):
-        parser.add_argument(f'--{field.name.lower()}', type=type(field.default))
+        if type(field.default) == bool:
+            parser.add_argument(f'--{field.name.lower()}',
+                                dest=field.name.lower(), action='store_true')
+            parser.add_argument(f'--no-{field.name.lower()}',
+                                dest=field.name.lower(), action='store_false')
+            parser.set_defaults(visualize=True)
+        else:
+            parser.add_argument(f'--{field.name.lower()}', type=type(field.default))
 
     args = parser.parse_args()
 
