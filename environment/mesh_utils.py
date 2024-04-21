@@ -10,29 +10,20 @@ from sklearn.linear_model import LinearRegression
 def dump_points(filename: str):
     mesh = meshio.avsucd.read(filename)
     points = torch.tensor(mesh.points, dtype=torch.float32)
-    x,y,z = points.transpose(0,1)
+    x, y, z = points.transpose(0, 1)
 
     min_x, min_y, min_z = torch.min(x), torch.min(y), torch.min(z)
     max_x, max_y, max_z = torch.max(x), torch.max(y), torch.max(z)
 
     x = (x - min_x) / (max_x - min_x)
-    y = (y - min_y) / (max_x - min_x)
-    z = (z - min_z) / (max_x - min_x)
-    z += 0.5 # for better visibility
-    return x,y,z
+    y = (y - min_y) / (max_y - min_y)
+    z = z / (max_z - min_z)  # does not keep relation between x,y and z
 
-# TODO take x_val, y_val and z_val as arguments
-def floor(x, y, mesh):
-    x_val, y_val, z_val = dump_points(mesh)
-    indices = np.where((x_val == x) & (y_val == y))[0]
+    return x, y, z
 
-    if len(indices) > 0:
-        return z_val[indices[0]]
-    else:
-        return None
 
 def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Tensor):
-    x,y,z = x.detach().numpy(), y.detach().numpy(), z.detach().numpy()
+    x, y, z = x.detach().numpy(), y.detach().numpy(), z.detach().numpy()
 
     degree = 3
     poly_features = PolynomialFeatures(degree=degree)
@@ -43,14 +34,13 @@ def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Ten
     x_values = np.linspace(np.min(x), np.max(x), 100)
     y_values = np.linspace(np.min(y), np.max(y), 100)
     x_mesh, y_mesh = np.meshgrid(x_values, y_values)
-    z_mesh = np.zeros_like(x_mesh)
 
     x_mesh_flat = x_mesh.ravel()
     y_mesh_flat = y_mesh.ravel()
     xy_mesh = np.column_stack((x_mesh_flat, y_mesh_flat))
     xy_poly = poly_features.transform(xy_mesh)
 
-    z_mesh_flat = lin_reg.predict(xy_poly)
+    lin_reg.predict(xy_poly)
 
     coefficients = lin_reg.coef_
     intercept = lin_reg.intercept_
@@ -64,9 +54,9 @@ def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Ten
     polynomial_eq = simplify(sum(terms))
 
     partial_derivative_x = diff(polynomial_eq, x)  # Partial derivative w.r.t. x
-    partial_derivative_y = diff(polynomial_eq, y) 
+    partial_derivative_y = diff(polynomial_eq, y)
 
     f_x = lambdify((x, y), partial_derivative_x, modules="numpy")
-    f_y = lambdify((x, y), partial_derivative_y, modules="numpy")   
+    f_y = lambdify((x, y), partial_derivative_y, modules="numpy")
 
     return f_x, f_y

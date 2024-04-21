@@ -8,6 +8,7 @@ class PINN(nn.Module):
     In the context of PINNs, the neural network is used as universal function approximator
     to approximate the solution of the differential equation
     """
+
     def __init__(self, num_hidden: int, dim_hidden: int, device=torch.device("cpu"), act=nn.Tanh()):
 
         super().__init__()

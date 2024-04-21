@@ -1,39 +1,44 @@
 import torch
 from typing import Callable
-from softadapt import SoftAdapt, NormalizedSoftAdapt, LossWeightedSoftAdapt
+from softadapt import LossWeightedSoftAdapt
 
 from environment.env import SimulationEnvironment
 from loss.wave_equations import dfdx, dfdy, f
 from model.pinn import PINN
-from model.weights import Weights
 from train.params import SimulationParameters
 
 
 class MixLoss:
+    """
+    Class representing the mixed loss function for a Physics Informed Neural Network (PINN).
+
+    The mixed loss function includes an initial loss, a residual loss, and a boundary loss.
+    Initially base loss is used, after softadapt_start_epoch the loss is weighted
+    according to the SoftAdapt algorithm.
+    """
+
     def __init__(
         self,
         environment: SimulationEnvironment,
-        weights: Weights,
-        params: SimulationParameters,
         initial_condition: Callable,
         wave_equation: Callable,
-        beta: float = 0.1
+        beta: float = 0.1,
+        softadapt_start_epoch: int = 300
     ):
         self.environment = environment
-        self.weights = weights
-        self.params = params
-
         self.wave_equation = wave_equation
         self.initial_condition = initial_condition
+        self.params = SimulationParameters()
 
-        # SoftAdapt https://github.com/dr-aheydari/SoftAdapt
         self.softadapt_object = LossWeightedSoftAdapt(beta=beta)
         self.epochs_to_make_updates = 5
+        self.softadapt_start_epoch = softadapt_start_epoch
         self.initial_history = []
         self.residual_history = []
         self.boundary_history = []
-        self.adaptive_weights = torch.tensor([self.weights.WEIGHT_INITIAL,self.weights.WEIGHT_RESIDUAL,self.weights.WEIGHT_BOUNDARY])
-
+        self.adaptive_weights = torch.tensor([self.params.INITIAL_WEIGHT_INITIAL,
+                                              self.params.INITIAL_WEIGHT_RESIDUAL,
+                                              self.params.INITIAL_WEIGHT_BOUNDARY])
 
     def residual_loss(self, pinn: PINN):
         x, y, z, t = self.environment.interior_points
@@ -53,20 +58,23 @@ class MixLoss:
     def boundary_loss(self, pinn: PINN):
         down, up, left, right = self.environment.boundary_points
 
-        x_down,  y_down,  t_down    = down
-        x_up,    y_up,    t_up      = up
-        x_left,  y_left,  t_left    = left
-        x_right, y_right, t_right   = right
+        x_down, y_down, t_down = down
+        x_up, y_up, t_up = up
+        x_left, y_left, t_left = left
+        x_right, y_right, t_right = right
 
-        loss_down  = dfdy( pinn, x_down,  y_down,  t_down  )
-        loss_up    = dfdy( pinn, x_up,    y_up,    t_up    )
-        loss_left  = dfdx( pinn, x_left,  y_left,  t_left  )
-        loss_right = dfdx( pinn, x_right, y_right, t_right )
+        loss_down = dfdy(pinn, x_down, y_down, t_down)
+        loss_up = dfdy(pinn, x_up, y_up, t_up)
+        loss_left = dfdx(pinn, x_left, y_left, t_left)
+        loss_right = dfdx(pinn, x_right, y_right, t_right)
 
-        return loss_down.pow(2).mean()  + \
-            loss_up.pow(2).mean()    + \
-            loss_left.pow(2).mean()  + \
+        return loss_down.pow(2).mean() + \
+            loss_up.pow(2).mean() + \
+            loss_left.pow(2).mean() + \
             loss_right.pow(2).mean()
+
+    def should_update_weights(self, epoch: int) -> bool:
+        return epoch > self.softadapt_start_epoch and epoch % self.epochs_to_make_updates == 0
 
     def verbose(self, pinn: PINN, epoch: int = 0):
         """
@@ -78,23 +86,23 @@ class MixLoss:
         initial_loss = self.initial_loss(pinn)
         boundary_loss = self.boundary_loss(pinn)
 
-        if epoch < 29996:
-            self.initial_history.append(initial_loss)
-            self.residual_history.append(residual_loss)
-            self.boundary_history.append(boundary_loss)
+        self.initial_history.append(initial_loss)
+        self.residual_history.append(residual_loss)
+        self.boundary_history.append(boundary_loss)
 
-        if epoch < 30_000 and epoch % self.epochs_to_make_updates == 0 and epoch != 0:
-            self.adaptive_weights = self.softadapt_object.get_component_weights(torch.tensor(self.initial_history), 
-                                                                torch.tensor(self.residual_history), 
-                                                                torch.tensor(self.boundary_history),
-                                                                verbose=False)
+        if self.should_update_weights(epoch):
+            self.adaptive_weights = self.softadapt_object.get_component_weights(
+                torch.tensor(self.initial_history),
+                torch.tensor(self.residual_history),
+                torch.tensor(self.boundary_history),
+                verbose=False)
             self.initial_history = []
             self.residual_history = []
             self.boundary_history = []
-    
+
         final_loss = self.adaptive_weights[0] * initial_loss \
-                    + self.adaptive_weights[1] * residual_loss \
-                    + self.adaptive_weights[2] * boundary_loss
+            + self.adaptive_weights[1] * residual_loss \
+            + self.adaptive_weights[2] * boundary_loss
 
         return final_loss, residual_loss, initial_loss, boundary_loss
 

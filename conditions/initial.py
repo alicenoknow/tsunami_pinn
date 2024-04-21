@@ -1,29 +1,31 @@
 import torch
 
 
-def initial_condition(x: torch.Tensor, y: torch.Tensor, xy_length: float) -> torch.Tensor:
-    r = torch.sqrt((x-xy_length/2)**2 + (y-xy_length/2)**2)
-    res = 0.5 * torch.exp(-(r)**2 * 50) + 0.4
-    return res
+def make_initial_condition(
+        base_height: float,
+        decay_rate: float,
+        peak_height: float,
+        x_divisor: float,
+        y_divisor: float):
+    """
+    Creates an initial condition function for a 2D Gaussian distribution.
 
-# def initial_condition(x: torch.Tensor, y: torch.Tensor, xy_length: float) -> torch.Tensor:
-#     base_height = 0.5
-#     k = 120
-#     n = 0.4
-#     x_center = xy_length/5
-#     y_center = xy_length/2
+    Parameters:
+    base_height (float): The base height of the distribution.
+    decay_rate (float): The decay rate of the distribution.
+    peak_height (float): The peak height of the distribution.
+    x_divisor (float): The divisor for the x-coordinate of the distribution's center.
+    y_divisor (float): The divisor for the y-coordinate of the distribution's center.
 
-#     r = torch.sqrt((x-x_center)**2 + (y-y_center)**2)
-#     res = n * torch.exp(-(r)**2 * k) + base_height
-#     return res
+    Returns:
+    Callable: A function that takes x and y coordinates and a length,
+    and returns a 2D Gaussian distribution.
+    """
+    def initial_condition(x: torch.Tensor, y: torch.Tensor, xy_length: float) -> torch.Tensor:
+        x_center = xy_length / x_divisor
+        y_center = xy_length / y_divisor
 
-def initial_condition(x: torch.Tensor, y: torch.Tensor, xy_length: float) -> torch.Tensor:
-    base_height = 0.5476
-    k = 120
-    n = 0.4
-    x_center = xy_length/5
-    y_center = xy_length/2
+        r = torch.sqrt((x - x_center)**2 + (y - y_center)**2)
+        return peak_height * torch.exp(-(r)**2 * decay_rate) + base_height
 
-    r = torch.sqrt((x-x_center)**2 + (y-y_center)**2)
-    res = n * torch.exp(-(r)**2 * k) + base_height
-    return res
+    return initial_condition

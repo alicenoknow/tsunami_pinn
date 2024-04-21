@@ -1,5 +1,12 @@
 {
-    "cSpell.words": [
-        "softadapt"
-    ]
+  "cSpell.words": [
+    "gifs",
+    "lambdify",
+    "softadapt",
+    "sympy"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true
+  }
 }
