@@ -65,7 +65,7 @@ def setup_device():
 
 def setup_environment(params, device):
     if params.MESH:
-        logger.info("Simulation environment:", params.MESH)
+        logger.info(f"Simulation environment: {params.MESH}")
         return MeshEnvironment(params.MESH, device), wave_equation
 
     logger.info("Simulation environment: no mesh")
@@ -91,8 +91,7 @@ def visualize_results(params, model, environment, initial_condition):
     plot_all(params.DIR,
              model,
              environment,
-             initial_condition,
-             mesh=params.MESH)
+             initial_condition)
 
 
 def run():

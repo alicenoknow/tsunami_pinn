@@ -10,6 +10,7 @@ from sklearn.linear_model import LinearRegression
 def dump_points(filename: str):
     mesh = meshio.avsucd.read(filename)
     points = torch.tensor(mesh.points, dtype=torch.float32)
+
     x, y, z = points.transpose(0, 1)
 
     min_x, min_y, min_z = torch.min(x), torch.min(y), torch.min(z)
@@ -27,9 +28,9 @@ def calculate_partial_derivatives(x: torch.Tensor, y: torch.Tensor, z: torch.Ten
 
     degree = 3
     poly_features = PolynomialFeatures(degree=degree)
-    X_poly = poly_features.fit_transform(np.column_stack((x, y)))
+    x_poly = poly_features.fit_transform(np.column_stack((x, y)))
     lin_reg = LinearRegression()
-    lin_reg.fit(X_poly, z)
+    lin_reg.fit(x_poly, z)
 
     x_values = np.linspace(np.min(x), np.max(x), 100)
     y_values = np.linspace(np.min(y), np.max(y), 100)

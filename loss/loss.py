@@ -1,5 +1,5 @@
 from typing import Callable
-
+import torch
 from environment.env import SimulationEnvironment
 from loss.wave_equations import dfdx, dfdy, f
 from model.pinn import PINN
@@ -56,9 +56,8 @@ class Loss:
 
         length = self.environment.domain.XY_DOMAIN[1]
         pinn_initial = self.initial_condition(x, y, length)
-        loss = f(pinn, x, y, t) - pinn_initial
 
-        return loss.pow(2).mean()
+        return (f(pinn, x, y, t) - pinn_initial).pow(2).mean()
 
     def boundary_loss(self, pinn: PINN):
         """
@@ -86,10 +85,11 @@ class Loss:
         loss_left = dfdx(pinn, x_left, y_left, t_left)
         loss_right = dfdx(pinn, x_right, y_right, t_right)
 
-        return loss_down.pow(2).mean() + \
-            loss_up.pow(2).mean() + \
-            loss_left.pow(2).mean() + \
-            loss_right.pow(2).mean()
+        return sum(map(torch.Tensor.mean,
+                       (loss_down.pow(2),
+                        loss_up.pow(2),
+                        loss_left.pow(2),
+                        loss_right.pow(2))))
 
     def verbose(self, pinn: PINN):
         """
