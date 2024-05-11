@@ -1,11 +1,11 @@
 {
   "INFO": "Basic config with mesh",
-  "LAYERS": 6,
-  "NEURONS_PER_LAYER": 240,
+  "LAYERS": 4,
+  "NEURONS_PER_LAYER": 160,
   "LOSS": "BASE",
 
   "RUN_NUM": 100,
-  "EPOCHS": 150000,
+  "EPOCHS": 50000,
   "LEARNING_RATE": 0.00015,
   "SAVE_BEST_CLB": true,
   "VISUALIZE": false,
@@ -13,12 +13,12 @@
   "CLIP_GRAD": false,
 
   "GRAVITY": 9.81,
-  "MESH": "data\\val_square_UTM_translated_10.inp",
+  "MESH": "data\\val_square_UTM_translated_8.inp",
   "DIR": "results",
 
   "BASE_HEIGHT": 0.0,
-  "DECAY_RATE": 120,
-  "PEAK_HEIGHT": 0.4,
+  "DECAY_RATE": 60,
+  "PEAK_HEIGHT": 0.2,
   "X_DIVISOR": 5,
   "Y_DIVISOR": 2,
 

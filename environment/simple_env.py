@@ -43,9 +43,9 @@ class SimpleEnvironment(SimulationEnvironment):
         x_grid, t_grid = torch.meshgrid(x_linspace, t_linspace, indexing="ij")
         y_grid, _ = torch.meshgrid(y_linspace, t_linspace, indexing="ij")
 
-        x_grid = self._reshape_and_to_device(x_grid, requires_grad)
-        y_grid = self._reshape_and_to_device(y_grid, requires_grad)
-        t_grid = self._reshape_and_to_device(t_grid, requires_grad)
+        x_grid = self._reshape_and_to_device(x_grid)
+        y_grid = self._reshape_and_to_device(y_grid)
+        t_grid = self._reshape_and_to_device(t_grid)
 
         x0 = torch.full_like(t_grid, self.domain.XY_DOMAIN[0], requires_grad=requires_grad)
         x1 = torch.full_like(t_grid, self.domain.XY_DOMAIN[1], requires_grad=requires_grad)

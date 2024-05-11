@@ -43,6 +43,7 @@ def setup_params(params):
 
     params.set_json(args.config)
     params.set_cli_args(args)
+    params.save_params()
 
 
 def setup_logger(params):

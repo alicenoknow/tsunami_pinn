@@ -69,3 +69,9 @@ class SimulationParameters:
             arg_value = getattr(args, field.name.lower())
             if arg_value is not None:
                 setattr(self, field.name, arg_value)
+
+    def save_params(self):
+        file_path = os.path.join(self.DIR, f"run_{self.RUN_NUM}", "config.json")
+        params_to_save = {field.name: getattr(self, field.name) for field in fields(self)}
+        with open(file_path, 'w') as json_file:
+            json.dump(params_to_save, json_file, indent=4)
