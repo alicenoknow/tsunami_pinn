@@ -94,11 +94,10 @@ class Training:
         plot_all(save_path,
                  self.model,
                  self.environment,
-                 self.initial_condition,
-                 mesh=self.params.MESH)
+                 self.initial_condition)
 
     def plot_averages(self, losses):
-        save_path = self.params.DIR
+        save_path = os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}")
         plot_running_average(save_path, losses[0], "Loss function (running average)", "total_loss")
         plot_running_average(
             save_path, losses[1], "Residual loss function (running average)", "residual_loss")

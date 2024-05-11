@@ -8,14 +8,12 @@ from environment.mesh_utils import calculate_partial_derivatives, dump_points
 
 class MeshEnvironment(SimulationEnvironment):
 
-    def __init__(self, mesh_filename: str,
-                 device=torch.device("cpu")) -> None:
+    def __init__(self, mesh_filename: str, device=torch.device("cpu")) -> None:
         super().__init__()
         self.domain = Domain()
         self.device = device
-        self.mesh_filename = mesh_filename
 
-        self.x_raw, self.y_raw, self.z_raw = dump_points(self.mesh_filename)
+        self.x_raw, self.y_raw, self.z_raw = dump_points(mesh_filename)
         self.interior_points = self.get_interior_points()
         self.initial_points = self.get_initial_points()
         self.boundary_points = self.get_boundary_points()
@@ -29,9 +27,8 @@ class MeshEnvironment(SimulationEnvironment):
                                                         torch.Tensor]:
         if n_points:
             return self.get_initial_points_n(n_points, requires_grad)
-        x_raw, y_raw = self.x_raw, self.y_raw
-        x_grid = x_raw.to(self.device)
-        y_grid = y_raw.to(self.device)
+        x_grid = self.x_raw.to(self.device)
+        y_grid = self.y_raw.to(self.device)
 
         x_grid = self._reshape_and_to_device(x_grid, requires_grad)
         y_grid = self._reshape_and_to_device(y_grid, requires_grad)
@@ -45,8 +42,8 @@ class MeshEnvironment(SimulationEnvironment):
 
         x_grid, y_grid = torch.meshgrid(x_linspace, y_linspace, indexing="ij")
 
-        x_grid = x_grid.reshape(-1, 1).to(self.device)
-        y_grid = y_grid.reshape(-1, 1).to(self.device)
+        x_grid = self._reshape_and_to_device(x_grid, requires_grad)
+        y_grid = self._reshape_and_to_device(y_grid, requires_grad)
 
         t0 = torch.full_like(x_grid, self.domain.T_DOMAIN[0], requires_grad=requires_grad)
         return (x_grid, y_grid, t0)
@@ -84,15 +81,14 @@ class MeshEnvironment(SimulationEnvironment):
         return down, up, left, right
 
     def get_interior_points(self, requires_grad=True):
-        x_raw, y_raw, z_raw = self.x_raw, self.y_raw, self.z_raw
         t_raw = torch.linspace(
             self.domain.T_DOMAIN[0],
             self.domain.T_DOMAIN[1],
             steps=self.domain.T_POINTS)
 
-        x_grid, t_grid = torch.meshgrid(x_raw, t_raw, indexing="ij")
-        y_grid, _ = torch.meshgrid(y_raw, t_raw, indexing="ij")
-        z_grid, _ = torch.meshgrid(z_raw, t_raw, indexing="ij")
+        x_grid, t_grid = torch.meshgrid(self.x_raw, t_raw, indexing="ij")
+        y_grid, _ = torch.meshgrid(self.y_raw, t_raw, indexing="ij")
+        z_grid, _ = torch.meshgrid(self.z_raw, t_raw, indexing="ij")
 
         x = self._reshape_and_to_device(x_grid, requires_grad)
         y = self._reshape_and_to_device(y_grid, requires_grad)
@@ -114,23 +110,21 @@ class MeshEnvironment(SimulationEnvironment):
                                requires_grad=False) -> Tuple[torch.Tensor,
                                                              torch.Tensor,
                                                              torch.Tensor]:
-        x_domain, y_domain = self.domain.XY_DOMAIN, self.domain.XY_DOMAIN
-        t_domain = self.domain.T_DOMAIN
         n_points_linspace = n_points if n_points else self.domain.N_POINTS
 
         x_linspace = torch.linspace(
-            x_domain[0],
-            x_domain[1],
+            self.domain.XY_DOMAIN[0],
+            self.domain.XY_DOMAIN[1],
             steps=n_points_linspace,
             requires_grad=requires_grad)
         y_linspace = torch.linspace(
-            y_domain[0],
-            y_domain[1],
+            self.domain.XY_DOMAIN[0],
+            self.domain.XY_DOMAIN[1],
             steps=n_points_linspace,
             requires_grad=requires_grad)
         t_linspace = torch.linspace(
-            t_domain[0],
-            t_domain[1],
+            self.domain.XY_DOMAIN[0],
+            self.domain.XY_DOMAIN[1],
             steps=self.domain.T_POINTS,
             requires_grad=requires_grad)
         return x_linspace, y_linspace, t_linspace

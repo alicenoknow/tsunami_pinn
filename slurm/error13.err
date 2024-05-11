@@ -1,0 +1,2 @@
+ cuda/12.1.1 loaded.
+slurmstepd: error: *** JOB 9215176 ON ag0009 CANCELLED AT 2024-05-09T16:25:42 DUE TO TIME LIMIT ***

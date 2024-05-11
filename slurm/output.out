@@ -1,0 +1,18 @@
+[INFO] Logger set up successfully
+[INFO] Running on device: cuda
+[INFO] Starting snapshot record_memory_history
+[INFO] Simulation environment: data/val_square_UTM_translated_7.inp
+[INFO] Loss: SOFTADAPT
+[INFO] Run directory created successfully
+[INFO] Starting training run: 0
+[INFO] Finished training
+[INFO] Visualizing results
+[INFO] Total loss: 	0.02600 (2.600E-02)
+[INFO] Interior loss: 	0.00001 (9.475E-06)
+[INFO] Initial loss: 	0.00173 (1.730E-03)
+[INFO] Boundary loss: 	0.00000 (8.304E-07)
+[INFO] Plotting initial condition results
+[INFO] Plotting simulation frames
+[INFO] Creating GIFs
+[INFO] Saving snapshot to local file: ag0009_Apr_23_22_20_19.pickle
+[INFO] Stopping snapshot record_memory_history

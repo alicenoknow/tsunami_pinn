@@ -11,7 +11,7 @@ from train.params import SimulationParameters
 class SoftAdaptLoss:
     """
     SoftAdapt
-    https://github.com/dr-aheydari/SoftAdapt
+    pip install git+https://github.com/dr-aheydari/SoftAdapt.git
     """
 
     def __init__(

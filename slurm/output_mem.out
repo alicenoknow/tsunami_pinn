@@ -1,0 +1,15 @@
+[INFO] Logger set up successfully
+[INFO] Running on device: cuda
+[INFO] Simulation environment: data/val_square_UTM_translated_10.inp
+[INFO] Loss: SOFTADAPT
+[INFO] Run directory created successfully
+[INFO] Starting training run: 0
+[INFO] Finished training
+[INFO] Visualizing results
+[INFO] Total loss: 	0.03030 (3.030E-02)
+[INFO] Interior loss: 	0.00003 (3.017E-05)
+[INFO] Initial loss: 	0.00201 (2.009E-03)
+[INFO] Boundary loss: 	0.00001 (1.052E-05)
+[INFO] Plotting initial condition results
+[INFO] Plotting simulation frames
+[INFO] Creating GIFs

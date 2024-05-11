@@ -1,0 +1,53 @@
+ cuda/12.1.1 loaded.
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 1110, in emit
+    msg = self.format(record)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 953, in format
+    return fmt.format(record)
+           ^^^^^^^^^^^^^^^^^^
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 687, in format
+    record.message = record.getMessage()
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 377, in getMessage
+    msg = msg % self.args
+          ~~~~^~~~~~~~~~~
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/run_profile.py", line 189, in <module>
+    run()
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/run_profile.py", line 179, in run
+    training.start()
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/train/training.py", line 37, in start
+    loss_total, loss_r, loss_i, loss_b = self.train()
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/train/training.py", line 61, in train
+    logger.info("self.params.SAVE_BEST_CLB: ", self.params.SAVE_BEST_CLB, " self.params.REPORT", self.params.REPORT)
+Message: 'self.params.SAVE_BEST_CLB: '
+Arguments: (False, ' self.params.REPORT', False)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 1110, in emit
+    msg = self.format(record)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 953, in format
+    return fmt.format(record)
+           ^^^^^^^^^^^^^^^^^^
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 687, in format
+    record.message = record.getMessage()
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/miniconda3/envs/pinn_env/lib/python3.11/logging/__init__.py", line 377, in getMessage
+    msg = msg % self.args
+          ~~~~^~~~~~~~~~~
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/run_profile.py", line 189, in <module>
+    run()
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/run_profile.py", line 179, in run
+    training.start()
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/train/training.py", line 37, in start
+    loss_total, loss_r, loss_i, loss_b = self.train()
+  File "/net/pr2/projects/plgrid/plggtumorgpu/aniewiadomska/an_tsunami_pinn/train/training.py", line 61, in train
+    logger.info("self.params.SAVE_BEST_CLB: ", self.params.SAVE_BEST_CLB, " self.params.REPORT", self.params.REPORT)
+Message: 'self.params.SAVE_BEST_CLB: '
+Arguments: (False, ' self.params.REPORT', False)

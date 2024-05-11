@@ -1,0 +1,66 @@
+[INFO] Logger set up successfully
+[INFO] Running on device: cuda
+[INFO] Simulation environment: data/val_square_UTM_translated_12.inp
+[INFO] Loss: BASE
+[INFO] Run directory created successfully
+[INFO] Starting training run: 0
+[INFO] Finished training
+[INFO] Visualizing results
+[INFO] Total loss: 	0.05263 (5.263E-02)
+[INFO] Interior loss: 	0.28482 (2.848E-01)
+[INFO] Initial loss: 	0.00803 (8.034E-03)
+[INFO] Boundary loss: 	0.00463 (4.634E-03)
+[INFO] Plotting initial condition results
+[INFO] Plotting simulation frames
+[INFO] Plotting frame: 0
+[INFO] Plotting frame: 1
+[INFO] Plotting frame: 2
+[INFO] Plotting frame: 3
+[INFO] Plotting frame: 4
+[INFO] Plotting frame: 5
+[INFO] Plotting frame: 6
+[INFO] Plotting frame: 7
+[INFO] Plotting frame: 8
+[INFO] Plotting frame: 9
+[INFO] Plotting frame: 10
+[INFO] Plotting frame: 11
+[INFO] Plotting frame: 12
+[INFO] Plotting frame: 13
+[INFO] Plotting frame: 14
+[INFO] Plotting frame: 15
+[INFO] Plotting frame: 16
+[INFO] Plotting frame: 17
+[INFO] Plotting frame: 18
+[INFO] Plotting frame: 19
+[INFO] Plotting frame: 20
+[INFO] Plotting frame: 21
+[INFO] Plotting frame: 22
+[INFO] Plotting frame: 23
+[INFO] Plotting frame: 24
+[INFO] Plotting frame: 25
+[INFO] Plotting frame: 26
+[INFO] Plotting frame: 27
+[INFO] Plotting frame: 28
+[INFO] Plotting frame: 29
+[INFO] Plotting frame: 30
+[INFO] Plotting frame: 31
+[INFO] Plotting frame: 32
+[INFO] Plotting frame: 33
+[INFO] Plotting frame: 34
+[INFO] Plotting frame: 35
+[INFO] Plotting frame: 36
+[INFO] Plotting frame: 37
+[INFO] Plotting frame: 38
+[INFO] Plotting frame: 39
+[INFO] Plotting frame: 40
+[INFO] Plotting frame: 41
+[INFO] Plotting frame: 42
+[INFO] Plotting frame: 43
+[INFO] Plotting frame: 44
+[INFO] Plotting frame: 45
+[INFO] Plotting frame: 46
+[INFO] Plotting frame: 47
+[INFO] Plotting frame: 48
+[INFO] Plotting frame: 49
+[INFO] Creating GIFs
+[INFO] Creating report

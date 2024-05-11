@@ -30,20 +30,34 @@ def setup_params(params):
     parser.add_argument('--config', help='JSON config file name')
 
     for field in fields(SimulationParameters):
-        parser.add_argument(f'--{field.name.lower()}', type=type(field.default))
+        if type(field.default) == bool:
+            parser.add_argument(f'--{field.name.lower()}',
+                                dest=field.name.lower(), action='store_true')
+            parser.add_argument(f'--no-{field.name.lower()}',
+                                dest=field.name.lower(), action='store_false')
+        else:
+            parser.add_argument(f'--{field.name.lower()}', type=type(field.default))
+
+    parser.set_defaults(visualize=True)
+    parser.set_defaults(save_best_clb=True)
+    parser.set_defaults(report=True)
+    parser.set_defaults(clip_grad=True)
 
     args = parser.parse_args()
 
     params.set_json(args.config)
     params.set_cli_args(args)
+    params.save_params()
 
 
 def setup_logger(params):
     log_format = '[%(levelname)s] %(message)s'
+    log_dir = os.path.join(params.DIR, f"run_{params.RUN_NUM}")
+    os.makedirs(log_dir, exist_ok=True)
+
     file_handler = logging.FileHandler(
         os.path.join(
-            params.DIR,
-            f"run_{params.RUN_NUM}",
+            log_dir,
             "run.log"),
         "w")
     file_handler.setLevel(logging.INFO)
@@ -91,7 +105,6 @@ def setup_loss(environment,
     elif params.LOSS == LossFunction.MIX:
         return SoftAdaptLoss(environment, initial_condition, wave_equation)
     return Loss(environment, initial_condition, wave_equation)
-
 
 def run():
     params = SimulationParameters()

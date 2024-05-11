@@ -1,0 +1,31 @@
+[INFO] Logger set up successfully
+[INFO] Running on device: cuda
+[INFO] Simulation environment: data/val_square_UTM_translated_13.inp
+[INFO] Loss: RELO
+[INFO] Run directory created successfully
+[INFO] Starting training run: 4
+[INFO] Epoch: 1000 -             Loss: 0.033744,             Residual Loss: 0.000019,             Initial Loss: 0.002240,             Boundary Loss: 0.000052
+[INFO] Epoch: 2000 -             Loss: 0.033542,             Residual Loss: 0.000030,             Initial Loss: 0.002217,             Boundary Loss: 0.000138
+[INFO] Epoch: 3000 -             Loss: 0.033434,             Residual Loss: 0.000032,             Initial Loss: 0.002207,             Boundary Loss: 0.000168
+[INFO] Epoch: 4000 -             Loss: 0.033277,             Residual Loss: 0.000038,             Initial Loss: 0.002193,             Boundary Loss: 0.000196
+[INFO] Epoch: 5000 -             Loss: 0.032838,             Residual Loss: 0.000049,             Initial Loss: 0.002144,             Boundary Loss: 0.000433
+[INFO] Epoch: 6000 -             Loss: 0.032588,             Residual Loss: 0.000035,             Initial Loss: 0.002130,             Boundary Loss: 0.000462
+[INFO] Epoch: 7000 -             Loss: 0.032403,             Residual Loss: 0.000042,             Initial Loss: 0.002113,             Boundary Loss: 0.000507
+[INFO] Epoch: 8000 -             Loss: 0.032248,             Residual Loss: 0.000044,             Initial Loss: 0.002102,             Boundary Loss: 0.000500
+[INFO] Epoch: 9000 -             Loss: 0.032709,             Residual Loss: 0.000173,             Initial Loss: 0.002087,             Boundary Loss: 0.000539
+[INFO] Epoch: 10000 -             Loss: 0.031954,             Residual Loss: 0.000050,             Initial Loss: 0.002078,             Boundary Loss: 0.000532
+[INFO] Epoch: 11000 -             Loss: 0.031894,             Residual Loss: 0.000047,             Initial Loss: 0.002080,             Boundary Loss: 0.000450
+[INFO] Epoch: 12000 -             Loss: 0.031769,             Residual Loss: 0.000058,             Initial Loss: 0.002065,             Boundary Loss: 0.000505
+[INFO] Epoch: 13000 -             Loss: 0.031635,             Residual Loss: 0.000067,             Initial Loss: 0.002053,             Boundary Loss: 0.000509
+[INFO] Epoch: 14000 -             Loss: 0.031510,             Residual Loss: 0.000063,             Initial Loss: 0.002045,             Boundary Loss: 0.000512
+[INFO] Epoch: 15000 -             Loss: 0.031763,             Residual Loss: 0.000103,             Initial Loss: 0.002057,             Boundary Loss: 0.000395
+[INFO] Epoch: 16000 -             Loss: 0.031295,             Residual Loss: 0.000079,             Initial Loss: 0.002027,             Boundary Loss: 0.000492
+[INFO] Epoch: 17000 -             Loss: 0.031170,             Residual Loss: 0.000088,             Initial Loss: 0.002009,             Boundary Loss: 0.000591
+[INFO] Epoch: 18000 -             Loss: 0.031070,             Residual Loss: 0.000101,             Initial Loss: 0.001996,             Boundary Loss: 0.000634
+[INFO] Epoch: 19000 -             Loss: 0.031009,             Residual Loss: 0.000103,             Initial Loss: 0.001989,             Boundary Loss: 0.000658
+[INFO] Epoch: 20000 -             Loss: 0.030946,             Residual Loss: 0.000108,             Initial Loss: 0.001982,             Boundary Loss: 0.000675
+[INFO] Epoch: 21000 -             Loss: 0.030879,             Residual Loss: 0.000110,             Initial Loss: 0.001976,             Boundary Loss: 0.000688
+[INFO] Epoch: 22000 -             Loss: 0.030785,             Residual Loss: 0.000120,             Initial Loss: 0.001965,             Boundary Loss: 0.000710
+[INFO] Epoch: 23000 -             Loss: 0.030688,             Residual Loss: 0.000125,             Initial Loss: 0.001956,             Boundary Loss: 0.000720
+[INFO] Epoch: 24000 -             Loss: 0.030599,             Residual Loss: 0.000139,             Initial Loss: 0.001945,             Boundary Loss: 0.000731
+[INFO] Epoch: 25000 -             Loss: 0.030482,             Residual Loss: 0.000151,             Initial Loss: 0.001931,             Boundary Loss: 0.000761
