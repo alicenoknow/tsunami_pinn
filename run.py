@@ -35,9 +35,13 @@ def setup_params(params):
                                 dest=field.name.lower(), action='store_true')
             parser.add_argument(f'--no-{field.name.lower()}',
                                 dest=field.name.lower(), action='store_false')
-            parser.set_defaults(visualize=True)
         else:
             parser.add_argument(f'--{field.name.lower()}', type=type(field.default))
+
+    parser.set_defaults(visualize=True)
+    parser.set_defaults(save_best_clb=True)
+    parser.set_defaults(report=True)
+    parser.set_defaults(clip_grad=True)
 
     args = parser.parse_args()
 
@@ -101,7 +105,6 @@ def setup_loss(environment,
     elif params.LOSS == LossFunction.MIX:
         return SoftAdaptLoss(environment, initial_condition, wave_equation)
     return Loss(environment, initial_condition, wave_equation)
-
 
 def run():
     params = SimulationParameters()

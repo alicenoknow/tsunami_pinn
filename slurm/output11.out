@@ -1,0 +1,108 @@
+[INFO] Logger set up successfully
+[INFO] Running on device: cuda
+[INFO] Starting snapshot record_memory_history
+[INFO] Simulation environment: data/val_square_UTM_translated_12.inp
+[INFO] Loss: BASE
+[INFO] Run directory created successfully
+[INFO] Starting training run: 11
+[INFO] Epoch: 1000 -             Loss: 0.017481,             Residual Loss: 0.000071,             Initial Loss: 0.002170,             Boundary Loss: 0.000049
+[INFO] Epoch: 2000 -             Loss: 0.017329,             Residual Loss: 0.000096,             Initial Loss: 0.002142,             Boundary Loss: 0.000101
+[INFO] Epoch: 3000 -             Loss: 0.017216,             Residual Loss: 0.000092,             Initial Loss: 0.002122,             Boundary Loss: 0.000150
+[INFO] Epoch: 4000 -             Loss: 0.017124,             Residual Loss: 0.000090,             Initial Loss: 0.002101,             Boundary Loss: 0.000225
+[INFO] Epoch: 5000 -             Loss: 0.017120,             Residual Loss: 0.000061,             Initial Loss: 0.002115,             Boundary Loss: 0.000138
+[INFO] Epoch: 6000 -             Loss: 0.017969,             Residual Loss: 0.001031,             Initial Loss: 0.002085,             Boundary Loss: 0.000261
+[INFO] Epoch: 7000 -             Loss: 0.016868,             Residual Loss: 0.000084,             Initial Loss: 0.002064,             Boundary Loss: 0.000268
+[INFO] Epoch: 8000 -             Loss: 0.016818,             Residual Loss: 0.000097,             Initial Loss: 0.002058,             Boundary Loss: 0.000254
+[INFO] Epoch: 9000 -             Loss: 0.016936,             Residual Loss: 0.000169,             Initial Loss: 0.002069,             Boundary Loss: 0.000216
+[INFO] Epoch: 10000 -             Loss: 0.016722,             Residual Loss: 0.000126,             Initial Loss: 0.002042,             Boundary Loss: 0.000258
+[INFO] Epoch: 11000 -             Loss: 0.016709,             Residual Loss: 0.000108,             Initial Loss: 0.002048,             Boundary Loss: 0.000215
+[INFO] Epoch: 12000 -             Loss: 0.016569,             Residual Loss: 0.000163,             Initial Loss: 0.002014,             Boundary Loss: 0.000293
+[INFO] Epoch: 13000 -             Loss: 0.016518,             Residual Loss: 0.000173,             Initial Loss: 0.002006,             Boundary Loss: 0.000296
+[INFO] Epoch: 14000 -             Loss: 0.016455,             Residual Loss: 0.000194,             Initial Loss: 0.001993,             Boundary Loss: 0.000316
+[INFO] Epoch: 15000 -             Loss: 0.016399,             Residual Loss: 0.000199,             Initial Loss: 0.001984,             Boundary Loss: 0.000328
+[INFO] Epoch: 16000 -             Loss: 0.016338,             Residual Loss: 0.000210,             Initial Loss: 0.001972,             Boundary Loss: 0.000353
+[INFO] Epoch: 17000 -             Loss: 0.016281,             Residual Loss: 0.000219,             Initial Loss: 0.001960,             Boundary Loss: 0.000378
+[INFO] Epoch: 18000 -             Loss: 0.016230,             Residual Loss: 0.000229,             Initial Loss: 0.001951,             Boundary Loss: 0.000396
+[INFO] Epoch: 19000 -             Loss: 0.016182,             Residual Loss: 0.000244,             Initial Loss: 0.001941,             Boundary Loss: 0.000409
+[INFO] Epoch: 20000 -             Loss: 0.016130,             Residual Loss: 0.000256,             Initial Loss: 0.001932,             Boundary Loss: 0.000417
+[INFO] Epoch: 21000 -             Loss: 0.016089,             Residual Loss: 0.000259,             Initial Loss: 0.001927,             Boundary Loss: 0.000415
+[INFO] Epoch: 22000 -             Loss: 0.016041,             Residual Loss: 0.000279,             Initial Loss: 0.001918,             Boundary Loss: 0.000414
+[INFO] Epoch: 23000 -             Loss: 0.016484,             Residual Loss: 0.000623,             Initial Loss: 0.001930,             Boundary Loss: 0.000418
+[INFO] Epoch: 24000 -             Loss: 0.015908,             Residual Loss: 0.000327,             Initial Loss: 0.001891,             Boundary Loss: 0.000450
+[INFO] Epoch: 25000 -             Loss: 0.015812,             Residual Loss: 0.000351,             Initial Loss: 0.001875,             Boundary Loss: 0.000458
+[INFO] Epoch: 26000 -             Loss: 0.015722,             Residual Loss: 0.000376,             Initial Loss: 0.001861,             Boundary Loss: 0.000459
+[INFO] Epoch: 27000 -             Loss: 0.015621,             Residual Loss: 0.000432,             Initial Loss: 0.001840,             Boundary Loss: 0.000469
+[INFO] Epoch: 28000 -             Loss: 0.015545,             Residual Loss: 0.000471,             Initial Loss: 0.001825,             Boundary Loss: 0.000471
+[INFO] Epoch: 29000 -             Loss: 0.015472,             Residual Loss: 0.000499,             Initial Loss: 0.001813,             Boundary Loss: 0.000471
+[INFO] Epoch: 30000 -             Loss: 0.015397,             Residual Loss: 0.000535,             Initial Loss: 0.001798,             Boundary Loss: 0.000475
+[INFO] Epoch: 31000 -             Loss: 0.015325,             Residual Loss: 0.000563,             Initial Loss: 0.001785,             Boundary Loss: 0.000479
+[INFO] Epoch: 32000 -             Loss: 0.015350,             Residual Loss: 0.000627,             Initial Loss: 0.001783,             Boundary Loss: 0.000456
+[INFO] Epoch: 33000 -             Loss: 0.015209,             Residual Loss: 0.000629,             Initial Loss: 0.001761,             Boundary Loss: 0.000491
+[INFO] Epoch: 34000 -             Loss: 0.015108,             Residual Loss: 0.000626,             Initial Loss: 0.001749,             Boundary Loss: 0.000494
+[INFO] Epoch: 35000 -             Loss: 0.015043,             Residual Loss: 0.000641,             Initial Loss: 0.001738,             Boundary Loss: 0.000498
+[INFO] Epoch: 36000 -             Loss: 0.014991,             Residual Loss: 0.000641,             Initial Loss: 0.001732,             Boundary Loss: 0.000495
+[INFO] Epoch: 37000 -             Loss: 0.014933,             Residual Loss: 0.000668,             Initial Loss: 0.001720,             Boundary Loss: 0.000507
+[INFO] Epoch: 38000 -             Loss: 0.014886,             Residual Loss: 0.000681,             Initial Loss: 0.001712,             Boundary Loss: 0.000512
+[INFO] Epoch: 39000 -             Loss: 0.014862,             Residual Loss: 0.000682,             Initial Loss: 0.001709,             Boundary Loss: 0.000506
+[INFO] Epoch: 40000 -             Loss: 0.014806,             Residual Loss: 0.000702,             Initial Loss: 0.001699,             Boundary Loss: 0.000512
+[INFO] Epoch: 41000 -             Loss: 0.014767,             Residual Loss: 0.000717,             Initial Loss: 0.001692,             Boundary Loss: 0.000515
+[INFO] Epoch: 42000 -             Loss: 0.014731,             Residual Loss: 0.000729,             Initial Loss: 0.001686,             Boundary Loss: 0.000517
+[INFO] Epoch: 43000 -             Loss: 0.014705,             Residual Loss: 0.000727,             Initial Loss: 0.001683,             Boundary Loss: 0.000511
+[INFO] Epoch: 44000 -             Loss: 0.014671,             Residual Loss: 0.000744,             Initial Loss: 0.001676,             Boundary Loss: 0.000517
+[INFO] Epoch: 45000 -             Loss: 0.014642,             Residual Loss: 0.000754,             Initial Loss: 0.001672,             Boundary Loss: 0.000513
+[INFO] Epoch: 46000 -             Loss: 0.014641,             Residual Loss: 0.000791,             Initial Loss: 0.001667,             Boundary Loss: 0.000516
+[INFO] Epoch: 47000 -             Loss: 0.014959,             Residual Loss: 0.001157,             Initial Loss: 0.001660,             Boundary Loss: 0.000523
+[INFO] Epoch: 48000 -             Loss: 0.014555,             Residual Loss: 0.000785,             Initial Loss: 0.001657,             Boundary Loss: 0.000515
+[INFO] Epoch: 49000 -             Loss: 0.014556,             Residual Loss: 0.000779,             Initial Loss: 0.001661,             Boundary Loss: 0.000491
+[INFO] Epoch: 50000 -             Loss: 0.014495,             Residual Loss: 0.000804,             Initial Loss: 0.001648,             Boundary Loss: 0.000506
+[INFO] Epoch: 51000 -             Loss: 0.014467,             Residual Loss: 0.000815,             Initial Loss: 0.001644,             Boundary Loss: 0.000503
+[INFO] Epoch: 52000 -             Loss: 0.014437,             Residual Loss: 0.000829,             Initial Loss: 0.001639,             Boundary Loss: 0.000498
+[INFO] Epoch: 53000 -             Loss: 0.014880,             Residual Loss: 0.001196,             Initial Loss: 0.001651,             Boundary Loss: 0.000477
+[INFO] Epoch: 54000 -             Loss: 0.014394,             Residual Loss: 0.000825,             Initial Loss: 0.001637,             Boundary Loss: 0.000477
+[INFO] Epoch: 55000 -             Loss: 0.014358,             Residual Loss: 0.000859,             Initial Loss: 0.001627,             Boundary Loss: 0.000482
+[INFO] Epoch: 56000 -             Loss: 0.014335,             Residual Loss: 0.000873,             Initial Loss: 0.001623,             Boundary Loss: 0.000476
+[INFO] Epoch: 57000 -             Loss: 0.014934,             Residual Loss: 0.001564,             Initial Loss: 0.001612,             Boundary Loss: 0.000475
+[INFO] Epoch: 58000 -             Loss: 0.014390,             Residual Loss: 0.001012,             Initial Loss: 0.001613,             Boundary Loss: 0.000473
+[INFO] Epoch: 59000 -             Loss: 0.014265,             Residual Loss: 0.000906,             Initial Loss: 0.001612,             Boundary Loss: 0.000460
+[INFO] Epoch: 60000 -             Loss: 0.014342,             Residual Loss: 0.001028,             Initial Loss: 0.001608,             Boundary Loss: 0.000450
+[INFO] Epoch: 61000 -             Loss: 0.014209,             Residual Loss: 0.000913,             Initial Loss: 0.001606,             Boundary Loss: 0.000448
+[INFO] Epoch: 62000 -             Loss: 0.014229,             Residual Loss: 0.000969,             Initial Loss: 0.001603,             Boundary Loss: 0.000435
+[INFO] Epoch: 63000 -             Loss: 0.014174,             Residual Loss: 0.000957,             Initial Loss: 0.001599,             Boundary Loss: 0.000428
+[INFO] Epoch: 64000 -             Loss: 0.014254,             Residual Loss: 0.001084,             Initial Loss: 0.001592,             Boundary Loss: 0.000431
+[INFO] Epoch: 65000 -             Loss: 0.014171,             Residual Loss: 0.001023,             Initial Loss: 0.001590,             Boundary Loss: 0.000426
+[INFO] Epoch: 66000 -             Loss: 0.014057,             Residual Loss: 0.000974,             Initial Loss: 0.001583,             Boundary Loss: 0.000417
+[INFO] Epoch: 67000 -             Loss: 0.014025,             Residual Loss: 0.000985,             Initial Loss: 0.001578,             Boundary Loss: 0.000412
+[INFO] Epoch: 68000 -             Loss: 0.014253,             Residual Loss: 0.001177,             Initial Loss: 0.001584,             Boundary Loss: 0.000405
+[INFO] Epoch: 69000 -             Loss: 0.014092,             Residual Loss: 0.001122,             Initial Loss: 0.001570,             Boundary Loss: 0.000409
+[INFO] Epoch: 70000 -             Loss: 0.013949,             Residual Loss: 0.001032,             Initial Loss: 0.001565,             Boundary Loss: 0.000395
+[INFO] Epoch: 71000 -             Loss: 0.013929,             Residual Loss: 0.001052,             Initial Loss: 0.001560,             Boundary Loss: 0.000394
+[INFO] Epoch: 72000 -             Loss: 0.013923,             Residual Loss: 0.001110,             Initial Loss: 0.001552,             Boundary Loss: 0.000394
+[INFO] Epoch: 73000 -             Loss: 0.013985,             Residual Loss: 0.001186,             Initial Loss: 0.001551,             Boundary Loss: 0.000391
+[INFO] Epoch: 74000 -             Loss: 0.013794,             Residual Loss: 0.001025,             Initial Loss: 0.001548,             Boundary Loss: 0.000387
+[INFO] Epoch: 75000 -             Loss: 0.013791,             Residual Loss: 0.001050,             Initial Loss: 0.001545,             Boundary Loss: 0.000383
+[INFO] Epoch: 76000 -             Loss: 0.013730,             Residual Loss: 0.001052,             Initial Loss: 0.001537,             Boundary Loss: 0.000385
+[INFO] Epoch: 77000 -             Loss: 0.013969,             Residual Loss: 0.001347,             Initial Loss: 0.001530,             Boundary Loss: 0.000384
+[INFO] Epoch: 78000 -             Loss: 0.013943,             Residual Loss: 0.001280,             Initial Loss: 0.001534,             Boundary Loss: 0.000389
+[INFO] Epoch: 79000 -             Loss: 0.013690,             Residual Loss: 0.001117,             Initial Loss: 0.001523,             Boundary Loss: 0.000386
+[INFO] Epoch: 80000 -             Loss: 0.013778,             Residual Loss: 0.001216,             Initial Loss: 0.001523,             Boundary Loss: 0.000376
+[INFO] Epoch: 81000 -             Loss: 0.013601,             Residual Loss: 0.001083,             Initial Loss: 0.001517,             Boundary Loss: 0.000383
+[INFO] Epoch: 82000 -             Loss: 0.013633,             Residual Loss: 0.001121,             Initial Loss: 0.001518,             Boundary Loss: 0.000372
+[INFO] Epoch: 83000 -             Loss: 0.013551,             Residual Loss: 0.001096,             Initial Loss: 0.001510,             Boundary Loss: 0.000375
+[INFO] Epoch: 84000 -             Loss: 0.013605,             Residual Loss: 0.001192,             Initial Loss: 0.001506,             Boundary Loss: 0.000367
+[INFO] Epoch: 85000 -             Loss: 0.013682,             Residual Loss: 0.001277,             Initial Loss: 0.001505,             Boundary Loss: 0.000365
+[INFO] Epoch: 86000 -             Loss: 0.013473,             Residual Loss: 0.001104,             Initial Loss: 0.001500,             Boundary Loss: 0.000367
+[INFO] Epoch: 87000 -             Loss: 0.013525,             Residual Loss: 0.001197,             Initial Loss: 0.001496,             Boundary Loss: 0.000364
+[INFO] Epoch: 88000 -             Loss: 0.013415,             Residual Loss: 0.001124,             Initial Loss: 0.001491,             Boundary Loss: 0.000364
+[INFO] Epoch: 89000 -             Loss: 0.013384,             Residual Loss: 0.001117,             Initial Loss: 0.001488,             Boundary Loss: 0.000363
+[INFO] Epoch: 90000 -             Loss: 0.013368,             Residual Loss: 0.001128,             Initial Loss: 0.001486,             Boundary Loss: 0.000356
+[INFO] Finished training
+[INFO] Visualizing results
+[INFO] Total loss: 	0.01337 (1.337E-02)
+[INFO] Interior loss: 	0.00113 (1.128E-03)
+[INFO] Initial loss: 	0.00149 (1.486E-03)
+[INFO] Boundary loss: 	0.00036 (3.557E-04)
+[INFO] Plotting initial condition results
+[INFO] Plotting simulation frames
+[INFO] Creating GIFs
+[INFO] Saving snapshot to local file: ag0009_Apr_25_09_49_35.pickle
+[INFO] Stopping snapshot record_memory_history

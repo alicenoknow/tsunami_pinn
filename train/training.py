@@ -130,7 +130,6 @@ class Training:
         if loss < self.best_loss:
             torch.save(self.model, os.path.join(self.params.DIR,
                        f"run_{self.params.RUN_NUM}", f"best_{self.params.RUN_NUM}.pt"))
-
             self.best_loss = loss
 
     def report(self, loss_total, loss_r, loss_i, loss_b, time=0.0):

@@ -6,12 +6,14 @@ import numpy as np
 import torch
 import os
 
-from typing import Callable
+from typing import Callable, Optional
 from environment.env import SimulationEnvironment
 from environment.mesh_env import MeshEnvironment
+from environment.mesh_utils import dump_points
 
 from model.pinn import PINN
 
+logger = logging.getLogger()
 
 def plot_all(save_path: str,
              pinn: PINN,
@@ -19,13 +21,13 @@ def plot_all(save_path: str,
              initial_condition: Callable):
     os.makedirs(os.path.join(save_path, "img"), exist_ok=True)
 
-    logging.info("Plotting initial condition results")
+    logger.info("Plotting initial condition results")
     plot_initial_condition(save_path, environment, pinn, initial_condition)
 
-    logging.info("Plotting simulation frames")
+    logger.info("Plotting simulation frames")
     plot_simulation_by_frame(save_path, pinn, environment)
 
-    logging.info("Creating GIFs")
+    logger.info("Creating GIFs")
     create_all_gifs(save_path, environment.domain.T_DOMAIN[1])
 
 
@@ -34,7 +36,7 @@ def create_all_gifs(save_path: str,
                     step: float = 0.01,
                     duration: float = 0.1):
     create_gif(save_path, "img", total_time, step, duration)
-    create_gif(save_path, "img_top", total_time, step, duration)
+    # create_gif(save_path, "img_top", total_time, step, duration)
     create_gif(save_path, "img_color", total_time, step, duration)
 
 
@@ -223,9 +225,9 @@ def plot_frame(save_path: str,
     fig1 = plot_color(z, x, y, n_points_plot, title)
     plt.savefig(os.path.join(save_path, "img", "img_color_{:03d}.png".format(idx)))
 
-    fig2 = plot_3D_top_view(z, x, y, n_points_plot, environment, title)
-    img_path = os.path.join(save_path, "img", "img_top_{:03d}.png".format(idx))
-    fig2.write_image(img_path)
+    # fig2 = plot_3D_top_view(z, x, y, n_points_plot, environment, title)
+    # img_path = os.path.join(save_path, "img", "img_top_{:03d}.png".format(idx))
+    # fig2.write_image(img_path)
 
     fig3 = plot_3D(z, x, y, n_points_plot, length, environment, title)
     plt.savefig(os.path.join(save_path, "img", "img_{:03d}.png".format(idx)))
@@ -242,6 +244,7 @@ def plot_simulation_by_frame(save_path: str,
     time_values = np.arange(0, t_max, time_step)
 
     for idx, t_value in enumerate(time_values):
+        logger.info(f"Plotting frame: {idx}")
         plot_frame(save_path=save_path,
                    environment=environment,
                    pinn=pinn,

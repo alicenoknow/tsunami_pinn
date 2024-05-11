@@ -1,0 +1,18 @@
+[INFO] Logger set up successfully
+[INFO] Running on device: cuda
+[INFO] Starting snapshot record_memory_history
+[INFO] Simulation environment: no mesh
+[INFO] Loss: BASE
+[INFO] Run directory created successfully
+[INFO] Starting training run: 0
+[INFO] Finished training
+[INFO] Visualizing results
+[INFO] Total loss: 	0.19665 (1.967E-01)
+[INFO] Interior loss: 	0.00000 (2.248E-06)
+[INFO] Initial loss: 	0.00655 (6.555E-03)
+[INFO] Boundary loss: 	0.00015 (1.457E-04)
+[INFO] Plotting initial condition results
+[INFO] Plotting simulation frames
+[INFO] Creating GIFs
+[INFO] Saving snapshot to local file: ag0009_May_08_19_29_02.pickle
+[INFO] Stopping snapshot record_memory_history
