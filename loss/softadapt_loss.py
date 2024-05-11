@@ -34,7 +34,7 @@ class SoftAdaptLoss:
         self.boundary_history = []
         self.adaptive_weights = torch.tensor([self.params.INITIAL_WEIGHT_INITIAL,
                                               self.params.INITIAL_WEIGHT_RESIDUAL,
-                                              self.params.INITIAL_WEIGHT_BOUNDARY,])
+                                              self.params.INITIAL_WEIGHT_BOUNDARY])
 
     def residual_loss(self, pinn: PINN):
         x, y, z, t = self.environment.interior_points

@@ -88,6 +88,7 @@ def setup_loss(environment,
 
 
 def visualize_results(params, model, environment, initial_condition):
+    print("Saving images: ", params.DIR)
     plot_all(params.DIR,
              model,
              environment,
@@ -107,7 +108,7 @@ def run():
                                                params.X_DIVISOR,
                                                params.Y_DIVISOR)
 
-    logger.info(f'Loading model: {params.MODEL_PATH})')
+    logger.info(f'Loading model: {params.MODEL_PATH}')
     pinn = torch.load(params.MODEL_PATH).cuda()
 
     loss = setup_loss(
@@ -126,7 +127,7 @@ def run():
     logger.info(f'Boundary loss: \t{boundary_loss:.5f} ({boundary_loss:.3E})')
 
     logger.info('Visualizing results')
-    visualize_results(params, pinn, environment, initial_condition, )
+    visualize_results(params, pinn, environment, initial_condition)
 
 
 if __name__ == "__main__":

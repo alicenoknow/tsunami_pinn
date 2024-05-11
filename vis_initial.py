@@ -14,8 +14,7 @@ from visualization.plotting import plot_color, plot_3D
 
 
 def plot_initial(environment: SimulationEnvironment,
-                 initial_condition: Callable,
-                 mesh: str = None) -> None:
+                 initial_condition: Callable) -> None:
     title = "Initial condition"
     n_points_plot = environment.domain.N_POINTS_PLOT
     length = environment.domain.XY_DOMAIN[1]
@@ -26,7 +25,7 @@ def plot_initial(environment: SimulationEnvironment,
     plot_color(z, x, y, n_points_plot, f"{title}")
     plt.show()
 
-    plot_3D(z, x, y, n_points_plot, length, mesh, f"{title}")
+    plot_3D(z, x, y, n_points_plot, length, environment, f"{title}")
     plt.show()
 
 
@@ -45,4 +44,4 @@ if __name__ == '__main__':
         params.X_DIVISOR,
         params.Y_DIVISOR)
 
-    plot_initial(environment, initial_condition, mesh)
+    plot_initial(environment, initial_condition)

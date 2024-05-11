@@ -7,7 +7,15 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 
 
-def dump_points(filename: str):
+def dump_points(filename: str, z_relative_to_x: bool = True):
+    """
+    Reads triangular mesh from file.
+
+    Values are normalized with respect to x, to keep relation between dimensions.
+    Flag z_relative_to_x determines whether z is scaled to (0, 1) separately or with respect to x.
+
+    Returns vectors x, y, z where (x[i], y[i], z[i]) was the original point in mesh.
+    """
     mesh = meshio.avsucd.read(filename)
     points = torch.tensor(mesh.points, dtype=torch.float32)
 
@@ -17,8 +25,12 @@ def dump_points(filename: str):
     max_x, max_y, max_z = torch.max(x), torch.max(y), torch.max(z)
 
     x = (x - min_x) / (max_x - min_x)
-    y = (y - min_y) / (max_y - min_y)
-    z = z / (max_z - min_z)  # does not keep relation between x,y and z
+    y = (y - min_x) / (max_x - min_x)
+
+    if z_relative_to_x:
+        z = z / (max_x - min_x)
+    else:
+        z = z / (max_z - min_z)
 
     return x, y, z
 
