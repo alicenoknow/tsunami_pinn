@@ -7,7 +7,6 @@ from environment.mesh_utils import calculate_partial_derivatives, dump_points
 
 
 class MeshEnvironment(SimulationEnvironment):
-
     def __init__(self, mesh_filename: str, device=torch.device("cpu")) -> None:
         super().__init__()
         self.domain = Domain()
