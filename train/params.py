@@ -19,6 +19,7 @@ class SimulationParameters:
     LAYERS: int = 12
     NEURONS_PER_LAYER: int = 100
     LOSS: LossFunction = LossFunction.BASE
+    OPTIM = "ADAM"
     MODEL_PATH: str = ""
 
     # Training
@@ -71,7 +72,9 @@ class SimulationParameters:
                 setattr(self, field.name, arg_value)
 
     def save_params(self):
-        file_path = os.path.join(self.DIR, f"run_{self.RUN_NUM}", "config.json")
+        file_dir = os.path.join(self.DIR, f"run_{self.RUN_NUM}")
+        file_path = os.path.join(file_dir, "config.json")
+        os.makedirs(file_dir, exist_ok=True)
         params_to_save = {field.name: getattr(self, field.name) for field in fields(self)}
-        with open(file_path, 'w') as json_file:
+        with open(file_path, 'w+') as json_file:
             json.dump(params_to_save, json_file, indent=4)

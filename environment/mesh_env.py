@@ -12,10 +12,10 @@ class MeshEnvironment(SimulationEnvironment):
         self.domain = Domain()
         self.device = device
 
-        self.x_raw, self.y_raw, self.z_raw = dump_points(mesh_filename)
+        self.x_raw, self.y_raw, self.z_raw = dump_points(mesh_filename, True)
         self.interior_points = self.get_interior_points()
-        self.initial_points = self.get_initial_points(50)  # TODO: parametrize
-        self.boundary_points = self.get_boundary_points()
+        self.initial_points = self.get_initial_points(90)  # TODO: parametrize
+        self.boundary_points = self.get_boundary_points(30)
         self.partial_x, self.partial_y = calculate_partial_derivatives(
             self.x_raw, self.y_raw, self.z_raw)
 

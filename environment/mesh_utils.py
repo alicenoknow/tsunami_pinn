@@ -7,7 +7,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 
 
-def dump_points(filename: str, z_relative_to_x: bool = True):
+def dump_points(filename: str, z_relative_to_x: bool = False):
     """
     Reads triangular mesh from file.
 

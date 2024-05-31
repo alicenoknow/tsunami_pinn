@@ -55,7 +55,7 @@ def setup_logger(params):
         os.path.join(
             log_dir,
             "run.log"),
-        "w")
+        "w+")
     file_handler.setLevel(logging.INFO)
 
     stream_handler = logging.StreamHandler(sys.stdout)

@@ -3,7 +3,7 @@ import torch
 
 
 class PINN(nn.Module):
-    """Simple neural network accepting two features as input and returning a single output
+    """Simple neural network accepting (x, y, t) features as input and returning a single output
 
     In the context of PINNs, the neural network is used as universal function approximator
     to approximate the solution of the differential equation

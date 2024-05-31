@@ -143,8 +143,8 @@ def plot_3D_top_view(z: torch.Tensor,
     Y = convert_to_numpy(y, n_points_plot)
     Z = convert_to_numpy(z, n_points_plot)
 
-    fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=0.8,
-                    cmin=0.45, cmax=0.6, colorscale="Blues_r")])
+    fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=0.9,
+                    cmin=-0.3, cmax=0.3, colorscale="Blues_r")])
 
     fig.update_layout(
         title=title,
@@ -161,7 +161,7 @@ def plot_3D_top_view(z: torch.Tensor,
         fig.add_trace(go.Mesh3d(x=environment.x_raw,
                                 y=environment.y_raw,
                                 z=environment.z_raw,
-                                opacity=0.8))
+                                opacity=1))
 
     return fig
 

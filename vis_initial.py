@@ -10,7 +10,7 @@ from environment.env import SimulationEnvironment
 from environment.mesh_env import MeshEnvironment
 from environment.simple_env import SimpleEnvironment
 from train.params import SimulationParameters
-from visualization.plotting import plot_color, plot_3D
+from visualization.plotting import plot_color, plot_3D, plot_3D_top_view
 
 
 def plot_initial(environment: SimulationEnvironment,
@@ -22,11 +22,14 @@ def plot_initial(environment: SimulationEnvironment,
     x, y, _ = environment.get_initial_points(n_points_plot, requires_grad=False)
     z = initial_condition(x, y, length)
 
-    plot_color(z, x, y, n_points_plot, f"{title}")
+    plot_color(z, x, y, n_points_plot, title)
     plt.show()
 
-    plot_3D(z, x, y, n_points_plot, length, environment, f"{title}")
+    plot_3D(z, x, y, n_points_plot, length, environment, title)
     plt.show()
+
+    fig = plot_3D_top_view(z, x, y, n_points_plot, environment, title)
+    fig.show()
 
 
 if __name__ == '__main__':
