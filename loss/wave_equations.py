@@ -11,7 +11,17 @@ def f(pinn: "PINN",  # noqa: F821 # type: ignore
 
 
 def df(output: torch.Tensor, input: torch.Tensor, order: int = 1) -> torch.Tensor:
-    """Compute neural network derivative w.r.t. input features using PyTorch autograd engine"""
+    """    
+    Compute the nth-order derivative of a tensor with respect to the input tensor.
+
+    Args:
+        output (torch.Tensor): The output tensor, usually a result of some computation.
+        input (torch.Tensor): The input tensor with respect to which the derivative is computed.
+        order (int): The order of the derivative to compute. Default is 1 (first derivative).
+
+    Returns:
+        torch.Tensor: The computed nth-order derivative tensor.
+    """
     df_value = output
     for _ in range(order):
         df_value = torch.autograd.grad(
@@ -77,9 +87,7 @@ def wave_equation(
     dzdy = env.partial_y(x, y).to(env.device)
 
     return dfdt(pinn, x, y, t, u, order=2) - \
-        G * ((dfdx(pinn, x, y, t, u) - dzdx) *
-             dfdx(pinn, x, y, t, u) +
-             (u - z) * dfdx(pinn, x, y, t, u, order=2) +
-             (dfdy(pinn, x, y, t, u) - dzdy) *
-             dfdy(pinn, x, y, t, u) +
-             (u - z) * dfdy(pinn, x, y, t, u, order=2))
+        G * (dfdx(pinn, x, y, t, u)**2 + dfdy(pinn, x, y, t, u)**2 -
+             (dzdx * dfdx(pinn, x, y, t, u) + dzdy * dfdy(pinn, x, y, t, u)) +
+             (u - z) * (dfdx(pinn, x, y, t, u, order=2) + dfdy(pinn, x, y, t, u, order=2))
+             )

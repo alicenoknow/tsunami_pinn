@@ -16,14 +16,15 @@ from model.pinn import PINN
 def plot_all(save_path: str,
              pinn: PINN,
              environment: SimulationEnvironment,
-             initial_condition: Callable):
+             initial_condition: Callable,
+             limit: float = 0.1):
     os.makedirs(os.path.join(save_path, "img"), exist_ok=True)
 
     logging.info("Plotting initial condition results")
-    plot_initial_condition(save_path, environment, pinn, initial_condition)
+    plot_initial_condition(save_path, environment, pinn, initial_condition, limit=limit)
 
     logging.info("Plotting simulation frames")
-    plot_simulation_by_frame(save_path, pinn, environment)
+    plot_simulation_by_frame(save_path, pinn, environment, limit=limit)
 
     logging.info("Creating GIFs")
     create_all_gifs(save_path, environment.domain.T_DOMAIN[1])
@@ -35,6 +36,7 @@ def create_all_gifs(save_path: str,
                     duration: float = 0.1):
     create_gif(save_path, "img", total_time, step, duration)
     create_gif(save_path, "img_top", total_time, step, duration)
+    create_gif(save_path, "img_side", total_time, step, duration)
     create_gif(save_path, "img_color", total_time, step, duration)
 
 
@@ -55,7 +57,8 @@ def create_gif(save_path: str,
 def plot_initial_condition(save_path: str,
                            environment: SimulationEnvironment,
                            pinn: PINN,
-                           initial_condition: Callable) -> None:
+                           initial_condition: Callable,
+                           limit: float) -> None:
 
     title = "Initial condition"
     n_points_plot = environment.domain.N_POINTS_PLOT
@@ -65,13 +68,13 @@ def plot_initial_condition(save_path: str,
 
     z = initial_condition(x, y, length)
 
-    fig1 = plot_color(z, x, y, n_points_plot, f"{title} - exact")
-    fig2 = plot_3D(z, x, y, n_points_plot, length, environment, f"{title} - exact")
+    fig1 = plot_color(z, x, y, n_points_plot, f"{title} - exact", limit=limit)
+    fig2 = plot_3D(z, x, y, n_points_plot, length, environment, f"{title} - exact", limit=limit)
 
     z = pinn(x, y, t)
 
-    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN")
-    fig4 = plot_3D(z, x, y, n_points_plot, length, environment, f"{title} - PINN")
+    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN", limit=limit)
+    fig4 = plot_3D(z, x, y, n_points_plot, length, environment, f"{title} - PINN", limit=limit)
 
     c1 = fig1.canvas
     c2 = fig2.canvas
@@ -112,7 +115,7 @@ def plot_color(z: torch.Tensor,
                y: torch.Tensor,
                n_points_plot: int,
                title,
-               figsize=(8, 6), dpi=100, cmap="viridis", limit=0.5):
+               figsize=(8, 6), dpi=100, cmap="viridis", limit=0.03):
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     X = convert_to_numpy(x, n_points_plot)
@@ -124,8 +127,8 @@ def plot_color(z: torch.Tensor,
     ax.set_ylabel("y")
 
     c = ax.pcolormesh(X, Y, Z, cmap=cmap,
-                      vmin=-limit/2,  # for better visibility
-                      vmax=limit)
+                      vmin=-limit/20,  # for better visibility
+                      vmax=limit/10)
     fig.colorbar(c, ax=ax)
 
     return fig
@@ -137,14 +140,14 @@ def plot_3D_top_view(z: torch.Tensor,
                      n_points_plot: int,
                      environment: SimulationEnvironment,
                      title: str,
-                     limit=0.5):
+                     limit=0.03):
 
     X = convert_to_numpy(x, n_points_plot)
     Y = convert_to_numpy(y, n_points_plot)
     Z = convert_to_numpy(z, n_points_plot)
 
-    fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=0.9,
-                    cmin=-0.3, cmax=0.3, colorscale="Blues_r")])
+    fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
+                    cmin=-limit/10, cmax=limit/10, colorscale="Blues_r")])
 
     fig.update_layout(
         title=title,
@@ -153,7 +156,7 @@ def plot_3D_top_view(z: torch.Tensor,
             yaxis=dict(title="y"),
             zaxis=dict(range=[-limit, limit]),
             camera=dict(
-                eye=dict(x=0, y=0, z=1)  # Set the eye position for a top-down view
+                eye=dict(x=0, y=0, z=2)  # Set the eye position for a top-down view
             )
         ))
 
@@ -161,7 +164,48 @@ def plot_3D_top_view(z: torch.Tensor,
         fig.add_trace(go.Mesh3d(x=environment.x_raw,
                                 y=environment.y_raw,
                                 z=environment.z_raw,
-                                opacity=1))
+                                opacity=1,
+                                intensity=environment.z_raw,
+                                colorscale='Plasma',
+                                colorbar=dict(title='Altitude')))
+
+    return fig
+
+
+def plot_3D_side_view(z: torch.Tensor,
+                      x: torch.Tensor,
+                      y: torch.Tensor,
+                      n_points_plot: int,
+                      environment: SimulationEnvironment,
+                      title: str,
+                      limit=0.03):
+
+    X = convert_to_numpy(x, n_points_plot)
+    Y = convert_to_numpy(y, n_points_plot)
+    Z = convert_to_numpy(z, n_points_plot)
+
+    fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
+                    cmin=-limit/10, cmax=limit/10, colorscale="Blues_r")])
+
+    fig.update_layout(
+        title=title,
+        scene=dict(
+            xaxis=dict(title="x"),
+            yaxis=dict(title="y"),
+            zaxis=dict(range=[-limit, limit]),
+            camera=dict(
+                eye=dict(x=2, y=2, z=2)
+            )
+        ))
+
+    if isinstance(environment, MeshEnvironment):
+        fig.add_trace(go.Mesh3d(x=environment.x_raw,
+                                y=environment.y_raw,
+                                z=environment.z_raw,
+                                opacity=1,
+                                intensity=environment.z_raw,
+                                colorscale='Plasma',
+                                colorbar=dict(title='Altitude')))
 
     return fig
 
@@ -172,7 +216,7 @@ def plot_3D(z: torch.Tensor,
             n_points_plot: int,
             length: int,
             environment: SimulationEnvironment,
-            title: str, figsize=(8, 6), limit=0.5):
+            title: str, figsize=(8, 6), limit=0.03):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
 
@@ -184,13 +228,13 @@ def plot_3D(z: torch.Tensor,
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.axes.set_zlim3d(bottom=-limit, top=limit)
-    ax.plot_surface(X, Y, Z, alpha=0.8)
+    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=-limit/10, vmax=limit/10, cmap="Blues_r")
 
     if isinstance(environment, MeshEnvironment):
         ax.plot_trisurf(environment.x_raw,
                         environment.y_raw,
                         environment.z_raw,
-                        linewidth=0.2, alpha=0.8)
+                        linewidth=0.2, alpha=0.8, cmap="plasma")
 
     else:
         # based on floor function, replace zeros with function
@@ -210,7 +254,8 @@ def plot_frame(save_path: str,
                environment: SimulationEnvironment,
                pinn: PINN,
                idx: int,
-               t_value: float) -> None:
+               t_value: float,
+               limit: float) -> None:
 
     n_points_plot = environment.domain.N_POINTS_PLOT
     length = environment.domain.XY_DOMAIN[1]
@@ -220,24 +265,29 @@ def plot_frame(save_path: str,
     z = pinn(x, y, t)
 
     title = f"PINN for t = {t_value}"
-    fig1 = plot_color(z, x, y, n_points_plot, title)
+    fig1 = plot_color(z, x, y, n_points_plot, title, limit=limit)
     plt.savefig(os.path.join(save_path, "img", "img_color_{:03d}.png".format(idx)))
 
-    fig2 = plot_3D_top_view(z, x, y, n_points_plot, environment, title)
+    fig2 = plot_3D_top_view(z, x, y, n_points_plot, environment, title, limit=limit)
     img_path = os.path.join(save_path, "img", "img_top_{:03d}.png".format(idx))
     fig2.write_image(img_path)
 
-    fig3 = plot_3D(z, x, y, n_points_plot, length, environment, title)
+    fig3 = plot_3D_side_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    img_path = os.path.join(save_path, "img", "img_side_{:03d}.png".format(idx))
+    fig3.write_image(img_path)
+
+    fig4 = plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit)
     plt.savefig(os.path.join(save_path, "img", "img_{:03d}.png".format(idx)))
 
     plt.close(fig1)
-    plt.close(fig3)
+    plt.close(fig4)
 
 
 def plot_simulation_by_frame(save_path: str,
                              pinn: PINN,
                              environment: SimulationEnvironment,
-                             time_step: float = 0.01) -> None:
+                             time_step: float = 0.01,
+                             limit: float = 0.03) -> None:
     t_max = environment.domain.T_DOMAIN[1]
     time_values = np.arange(0, t_max, time_step)
 
@@ -246,7 +296,8 @@ def plot_simulation_by_frame(save_path: str,
                    environment=environment,
                    pinn=pinn,
                    idx=idx,
-                   t_value=t_value)
+                   t_value=t_value,
+                   limit=limit)
 
 
 def running_average(y, window: int = 100):

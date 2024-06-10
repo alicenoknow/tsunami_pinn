@@ -14,8 +14,8 @@ class MeshEnvironment(SimulationEnvironment):
 
         self.x_raw, self.y_raw, self.z_raw = dump_points(mesh_filename, True)
         self.interior_points = self.get_interior_points()
-        self.initial_points = self.get_initial_points(90)  # TODO: parametrize
-        self.boundary_points = self.get_boundary_points(30)
+        self.initial_points = self.get_initial_points(self.domain.INITIAL_POINTS)
+        self.boundary_points = self.get_boundary_points(self.domain.BOUNDARY_POINTS)
         self.partial_x, self.partial_y = calculate_partial_derivatives(
             self.x_raw, self.y_raw, self.z_raw)
 

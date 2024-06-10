@@ -10,7 +10,7 @@ from environment.env import SimulationEnvironment
 from environment.mesh_env import MeshEnvironment
 from environment.simple_env import SimpleEnvironment
 from train.params import SimulationParameters
-from visualization.plotting import plot_color, plot_3D, plot_3D_top_view
+from visualization.plotting import plot_color, plot_3D, plot_3D_top_view, plot_3D_side_view
 
 
 def plot_initial(environment: SimulationEnvironment,
@@ -22,13 +22,17 @@ def plot_initial(environment: SimulationEnvironment,
     x, y, _ = environment.get_initial_points(n_points_plot, requires_grad=False)
     z = initial_condition(x, y, length)
 
-    plot_color(z, x, y, n_points_plot, title)
+    limit = 0.04
+    plot_color(z, x, y, n_points_plot, title, limit=limit)
     plt.show()
 
-    plot_3D(z, x, y, n_points_plot, length, environment, title)
+    plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit)
     plt.show()
 
-    fig = plot_3D_top_view(z, x, y, n_points_plot, environment, title)
+    fig = plot_3D_top_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig.show()
+
+    fig = plot_3D_side_view(z, x, y, n_points_plot, environment, title, limit=limit)
     fig.show()
 
 
@@ -41,10 +45,10 @@ if __name__ == '__main__':
     params = SimulationParameters(MESH=mesh)
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
     initial_condition = make_initial_condition(
-        params.BASE_HEIGHT,
-        params.DECAY_RATE,
-        params.PEAK_HEIGHT,
-        params.X_DIVISOR,
-        params.Y_DIVISOR)
+        base_height=params.BASE_HEIGHT,
+        decay_rate=params.DECAY_RATE,
+        peak_height=params.PEAK_HEIGHT,
+        x_divisor=params.X_DIVISOR,
+        y_divisor=params.Y_DIVISOR)
 
     plot_initial(environment, initial_condition)

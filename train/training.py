@@ -53,27 +53,43 @@ class Training:
         return self.model, loss_total, loss_r, loss_i, loss_b
 
     def train(self):
+        lbfgs_optimizer = torch.optim.LBFGS(self.model.parameters(
+        ), lr=1.0, history_size=100, line_search_fn="strong_wolfe", max_iter=20)
         optimizer = torch.optim.Adam(self.model.parameters(), lr=self.params.LEARNING_RATE)
         loss_values = []
         residual_loss_values = []
         initial_loss_values = []
         boundary_loss_values = []
 
+        # Define the closure function for L-BFGS
+        def closure():
+            loss = self.loss(self.model, epoch)
+            optimizer.zero_grad()
+            loss[0].backward()
+            return loss[0]
+
         for epoch in range(self.params.EPOCHS):
             try:
-                loss: torch.Tensor = self.loss(self.model, epoch)
-                optimizer.zero_grad()
-                loss[0].backward()
 
-                if self.params.CLIP_GRAD:
-                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
+                if self.params.OPTIM_SWITCH and epoch >= self.params.OPTIM_SWITCH:
+                    total_loss = lbfgs_optimizer.step(closure).item()
+                    loss = self.loss(self.model, epoch)  # TODO optimize this
+                    optimizer.zero_grad()
+                else:
+                    loss = self.loss(self.model, epoch)
+                    optimizer.zero_grad()
+                    loss[0].backward()
+                    total_loss = loss[0].item()
 
-                optimizer.step()
+                    if self.params.CLIP_GRAD:
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
+
+                    optimizer.step()
 
                 if self.params.SAVE_BEST_CLB:
-                    self.save_best_callback(loss[0].item())
+                    self.save_best_callback(total_loss)
 
-                loss_values.append(loss[0].item())
+                loss_values.append(total_loss)
                 residual_loss_values.append(loss[1].item())
                 initial_loss_values.append(loss[2].item())
                 boundary_loss_values.append(loss[3].item())
@@ -94,7 +110,8 @@ class Training:
         plot_all(save_path,
                  self.model,
                  self.environment,
-                 self.initial_condition)
+                 self.initial_condition,
+                 limit=0.04)
 
     def plot_averages(self, losses):
         save_path = os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}")
@@ -159,6 +176,7 @@ class Training:
             "img_loss_b": os.path.join(save_dir, f"run_{num}", "boundary_loss.png"),
             "mesh_name": self.params.MESH if self.params.MESH else "-",
             "loss_name": self.params.LOSS,
+            "optim_name": self.params.OPTIM_SWITCH,
             "base_height": self.params.BASE_HEIGHT,
             "decay_rate": self.params.DECAY_RATE,
             "peak_height": self.params.PEAK_HEIGHT,

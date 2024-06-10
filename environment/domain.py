@@ -15,6 +15,8 @@ class Domain:
     T_DOMAIN: Tuple[float, float] = (0, 0.5)
 
     N_POINTS: int = 15
+    INITIAL_POINTS: int = 100
+    BOUNDARY_POINTS: int = 150
     T_POINTS: int = 30
 
     N_POINTS_PLOT: int = 50

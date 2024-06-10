@@ -21,8 +21,8 @@ def dump_points(filename: str, z_relative_to_x: bool = False):
 
     x, y, z = points.transpose(0, 1)
 
-    min_x, min_y, min_z = torch.min(x), torch.min(y), torch.min(z)
-    max_x, max_y, max_z = torch.max(x), torch.max(y), torch.max(z)
+    min_x, min_z = torch.min(x), torch.min(z)
+    max_x, max_z = torch.max(x), torch.max(z)
 
     x = (x - min_x) / (max_x - min_x)
     y = (y - min_x) / (max_x - min_x)
