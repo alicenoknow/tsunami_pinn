@@ -3,7 +3,7 @@
   "LAYERS": 6,
   "NEURONS_PER_LAYER": 100,
   "LOSS": "BASE",
-  "OPTIM": "ADAM",
+  "OPTIM_SWITCH": 25000,
 
   "RUN_NUM": 0,
   "EPOCHS": 200,
