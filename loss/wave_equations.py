@@ -91,3 +91,42 @@ def wave_equation(
              (dzdx * dfdx(pinn, x, y, t, u) + dzdy * dfdy(pinn, x, y, t, u)) +
              (u - z) * (dfdx(pinn, x, y, t, u, order=2) + dfdy(pinn, x, y, t, u, order=2))
              )
+
+
+def wave_equation_boundary(
+        pinn: "PINN",  # noqa: F821 # type: ignore
+        env: "SimulationEnvironment"):  # noqa: F821 # type: ignore
+
+    down, up, left, right = env.boundary_points
+
+    x_down, y_down, t_down = down
+    x_up, y_up, t_up = up
+    x_left, y_left, t_left = left
+    x_right, y_right, t_right = right
+
+    # Compute the derivatives of u with respect to x and y
+    dudy_down = dfdy(pinn, x_down, y_down, t_down)
+    dudy_up = dfdy(pinn, x_up, y_up, t_up)
+
+    dudx_left = dfdx(pinn, x_left, y_left, t_left)
+    dudx_right = dfdx(pinn, x_right, y_right, t_right)
+
+    # Compute the derivatives of z with respect to x and y
+    dzdy_down = env.partial_y(x_down, y_down).to(env.device)
+    dzdy_up = env.partial_y(x_up, y_up).to(env.device)
+
+    dzdx_left = env.partial_x(x_left, y_left).to(env.device)
+    dzdx_right = env.partial_x(x_right, y_right).to(env.device)
+
+    # Compute the boundary loss for each side
+    loss_down = dudy_down - dzdy_down
+    loss_up = dudy_up - dzdy_up
+    loss_left = dudx_left - dzdx_left
+    loss_right = dudx_right - dzdx_right
+
+    # Calculate the mean squared error for the boundary conditions
+    return sum(map(torch.Tensor.mean,
+                   (loss_down.pow(2),
+                    loss_up.pow(2),
+                    loss_left.pow(2),
+                    loss_right.pow(2))))

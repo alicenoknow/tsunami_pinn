@@ -21,13 +21,13 @@ def plot_all(save_path: str,
     os.makedirs(os.path.join(save_path, "img"), exist_ok=True)
 
     logging.info("Plotting initial condition results")
-    plot_initial_condition(save_path, environment, pinn, initial_condition, limit=limit)
+    plot_initial_condition(save_path, environment, pinn, initial_condition, limit=0.1)
 
     logging.info("Plotting simulation frames")
     plot_simulation_by_frame(save_path, pinn, environment, limit=limit)
 
     logging.info("Creating GIFs")
-    create_all_gifs(save_path, environment.domain.T_DOMAIN[1])
+    create_all_gifs(save_path, 3)  # environment.domain.T_DOMAIN[1])
 
 
 def create_all_gifs(save_path: str,
@@ -115,7 +115,7 @@ def plot_color(z: torch.Tensor,
                y: torch.Tensor,
                n_points_plot: int,
                title,
-               figsize=(8, 6), dpi=100, cmap="viridis", limit=0.03):
+               figsize=(8, 6), dpi=100, cmap="ocean", limit=0.03):
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     X = convert_to_numpy(x, n_points_plot)
@@ -127,8 +127,8 @@ def plot_color(z: torch.Tensor,
     ax.set_ylabel("y")
 
     c = ax.pcolormesh(X, Y, Z, cmap=cmap,
-                      vmin=-limit/20,  # for better visibility
-                      vmax=limit/10)
+                      vmin=-limit/2,  # for better visibility
+                      vmax=limit)
     fig.colorbar(c, ax=ax)
 
     return fig
@@ -147,7 +147,7 @@ def plot_3D_top_view(z: torch.Tensor,
     Z = convert_to_numpy(z, n_points_plot)
 
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
-                    cmin=-limit/10, cmax=limit/10, colorscale="Blues_r")])
+                    cmin=-0.1, cmax=0.1, colorscale="ice", colorbar=dict(title="Wave altitude", x=-0.1))])
 
     fig.update_layout(
         title=title,
@@ -156,7 +156,7 @@ def plot_3D_top_view(z: torch.Tensor,
             yaxis=dict(title="y"),
             zaxis=dict(range=[-limit, limit]),
             camera=dict(
-                eye=dict(x=0, y=0, z=2)  # Set the eye position for a top-down view
+                eye=dict(x=0, y=0, z=1.7)  # Set the eye position for a top-down view
             )
         ))
 
@@ -167,7 +167,7 @@ def plot_3D_top_view(z: torch.Tensor,
                                 opacity=1,
                                 intensity=environment.z_raw,
                                 colorscale='Plasma',
-                                colorbar=dict(title='Altitude')))
+                                colorbar=dict(title='Seabed altitude')))
 
     return fig
 
@@ -185,7 +185,7 @@ def plot_3D_side_view(z: torch.Tensor,
     Z = convert_to_numpy(z, n_points_plot)
 
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
-                    cmin=-limit/10, cmax=limit/10, colorscale="Blues_r")])
+                    cmin=-0.1, cmax=0.1, colorscale="ice", colorbar=dict(title="Wave altitude", x=-0.1))])
 
     fig.update_layout(
         title=title,
@@ -194,7 +194,7 @@ def plot_3D_side_view(z: torch.Tensor,
             yaxis=dict(title="y"),
             zaxis=dict(range=[-limit, limit]),
             camera=dict(
-                eye=dict(x=2, y=2, z=2)
+                eye=dict(x=1.1, y=1.1, z=1.1)
             )
         ))
 
@@ -205,7 +205,7 @@ def plot_3D_side_view(z: torch.Tensor,
                                 opacity=1,
                                 intensity=environment.z_raw,
                                 colorscale='Plasma',
-                                colorbar=dict(title='Altitude')))
+                                colorbar=dict(title='Seabed altitude')))
 
     return fig
 
@@ -228,7 +228,7 @@ def plot_3D(z: torch.Tensor,
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.axes.set_zlim3d(bottom=-limit, top=limit)
-    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=-limit/10, vmax=limit/10, cmap="Blues_r")
+    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=-0.1, vmax=0.1, cmap="ocean")
 
     if isinstance(environment, MeshEnvironment):
         ax.plot_trisurf(environment.x_raw,
@@ -264,7 +264,7 @@ def plot_frame(save_path: str,
     t = torch.full_like(x, t_value)
     z = pinn(x, y, t)
 
-    title = f"PINN for t = {t_value}"
+    title = "PINN for t = %.2f" % t_value
     fig1 = plot_color(z, x, y, n_points_plot, title, limit=limit)
     plt.savefig(os.path.join(save_path, "img", "img_color_{:03d}.png".format(idx)))
 
@@ -288,7 +288,7 @@ def plot_simulation_by_frame(save_path: str,
                              environment: SimulationEnvironment,
                              time_step: float = 0.01,
                              limit: float = 0.03) -> None:
-    t_max = environment.domain.T_DOMAIN[1]
+    t_max = 3  # environment.domain.T_DOMAIN[1]
     time_values = np.arange(0, t_max, time_step)
 
     for idx, t_value in enumerate(time_values):

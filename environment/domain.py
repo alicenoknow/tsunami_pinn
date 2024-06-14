@@ -11,12 +11,12 @@ class Domain:
         3. The mesh is normalized, xy_domain is [0, 1]
 
     """
-    XY_DOMAIN: Tuple[float, float] = (0, 1.0)
-    T_DOMAIN: Tuple[float, float] = (0, 0.5)
+    XY_DOMAIN: Tuple[float, float] = (0, 17.2946)
+    T_DOMAIN: Tuple[float, float] = (0, 1)
 
-    N_POINTS: int = 15
-    INITIAL_POINTS: int = 100
-    BOUNDARY_POINTS: int = 150
-    T_POINTS: int = 30
+    N_POINTS: int = 50
+    INITIAL_POINTS: int = 180
+    BOUNDARY_POINTS: int = 100
+    T_POINTS: int = 50
 
-    N_POINTS_PLOT: int = 50
+    N_POINTS_PLOT: int = 150

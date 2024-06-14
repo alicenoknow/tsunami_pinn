@@ -20,9 +20,9 @@ def plot_initial(environment: SimulationEnvironment,
     length = environment.domain.XY_DOMAIN[1]
 
     x, y, _ = environment.get_initial_points(n_points_plot, requires_grad=False)
-    z = initial_condition(x, y, length)
+    z = initial_condition(x, y, torch.max(x))
 
-    limit = 0.04
+    limit = 0.5
     plot_color(z, x, y, n_points_plot, title, limit=limit)
     plt.show()
 
@@ -46,8 +46,8 @@ if __name__ == '__main__':
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
     initial_condition = make_initial_condition(
         base_height=params.BASE_HEIGHT,
-        decay_rate=params.DECAY_RATE,
-        peak_height=params.PEAK_HEIGHT,
+        decay_rate=0.4,
+        peak_height=0.12,  # 0.04 - 130m
         x_divisor=params.X_DIVISOR,
         y_divisor=params.Y_DIVISOR)
 

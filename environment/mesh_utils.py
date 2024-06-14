@@ -12,7 +12,6 @@ def dump_points(filename: str, z_relative_to_x: bool = False):
     Reads triangular mesh from file.
 
     Values are normalized with respect to x, to keep relation between dimensions.
-    Flag z_relative_to_x determines whether z is scaled to (0, 1) separately or with respect to x.
 
     Returns vectors x, y, z where (x[i], y[i], z[i]) was the original point in mesh.
     """
@@ -24,13 +23,17 @@ def dump_points(filename: str, z_relative_to_x: bool = False):
     min_x, min_z = torch.min(x), torch.min(z)
     max_x, max_z = torch.max(x), torch.max(z)
 
-    x = (x - min_x) / (max_x - min_x)
-    y = (y - min_x) / (max_x - min_x)
+    # x = (x - min_x) / (max_x - min_x)
+    # y = (y - min_x) / (max_x - min_x)
 
-    if z_relative_to_x:
-        z = z / (max_x - min_x)
-    else:
-        z = z / (max_z - min_z)
+    x = x / (max_z - min_z)
+    y = y / (max_z - min_z)
+    z = z / (max_z - min_z)
+
+    # if z_relative_to_x:
+    #     z = z / (max_x - min_x)
+    # else:
+    #     z = z / (max_z - min_z)
 
     return x, y, z
 

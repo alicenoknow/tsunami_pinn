@@ -92,7 +92,8 @@ def visualize_results(params, model, environment, initial_condition):
     plot_all(params.DIR,
              model,
              environment,
-             initial_condition)
+             initial_condition,
+             limit=1)
 
 
 def run():

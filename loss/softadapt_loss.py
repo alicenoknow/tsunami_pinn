@@ -3,7 +3,7 @@ from typing import Callable
 from softadapt import LossWeightedSoftAdapt
 
 from environment.env import SimulationEnvironment
-from loss.wave_equations import dfdx, dfdy, f
+from loss.wave_equations import dfdx, dfdy, f, wave_equation_boundary
 from model.pinn import PINN
 from train.params import SimulationParameters
 
@@ -52,22 +52,23 @@ class SoftAdaptLoss:
         return loss.pow(2).mean()
 
     def boundary_loss(self, pinn: PINN):
-        down, up, left, right = self.environment.boundary_points
+        return wave_equation_boundary(pinn, self.environment)
+        # down, up, left, right = self.environment.boundary_points
 
-        x_down, y_down, t_down = down
-        x_up, y_up, t_up = up
-        x_left, y_left, t_left = left
-        x_right, y_right, t_right = right
+        # x_down, y_down, t_down = down
+        # x_up, y_up, t_up = up
+        # x_left, y_left, t_left = left
+        # x_right, y_right, t_right = right
 
-        loss_down = dfdy(pinn, x_down, y_down, t_down)
-        loss_up = dfdy(pinn, x_up, y_up, t_up)
-        loss_left = dfdx(pinn, x_left, y_left, t_left)
-        loss_right = dfdx(pinn, x_right, y_right, t_right)
+        # loss_down = dfdy(pinn, x_down, y_down, t_down)
+        # loss_up = dfdy(pinn, x_up, y_up, t_up)
+        # loss_left = dfdx(pinn, x_left, y_left, t_left)
+        # loss_right = dfdx(pinn, x_right, y_right, t_right)
 
-        return loss_down.pow(2).mean() + \
-            loss_up.pow(2).mean() + \
-            loss_left.pow(2).mean() + \
-            loss_right.pow(2).mean()
+        # return loss_down.pow(2).mean() + \
+        #     loss_up.pow(2).mean() + \
+        #     loss_left.pow(2).mean() + \
+        #     loss_right.pow(2).mean()
 
     def verbose(self, pinn: PINN, epoch: int = 0):
         """
