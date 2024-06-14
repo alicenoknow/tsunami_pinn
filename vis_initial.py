@@ -22,17 +22,20 @@ def plot_initial(environment: SimulationEnvironment,
     x, y, _ = environment.get_initial_points(n_points_plot, requires_grad=False)
     z = initial_condition(x, y, length)
 
-    limit = 0.04
-    plot_color(z, x, y, n_points_plot, title, limit=limit)
+    limit = 0.02
+    limit_wave = 0.004
+    plot_color(z, x, y, n_points_plot, title, limit=limit_wave)
     plt.show()
 
-    plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit)
+    plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit, limit_wave=limit_wave)
     plt.show()
 
-    fig = plot_3D_top_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig = plot_3D_top_view(z, x, y, n_points_plot, environment,
+                           title, limit=limit, limit_wave=limit_wave)
     fig.show()
 
-    fig = plot_3D_side_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig = plot_3D_side_view(z, x, y, n_points_plot, environment,
+                            title, limit=limit, limit_wave=limit_wave)
     fig.show()
 
 

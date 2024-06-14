@@ -111,7 +111,8 @@ class Training:
                  self.model,
                  self.environment,
                  self.initial_condition,
-                 limit=0.04)
+                 limit=0.04,
+                 limit_wave=self.params.PEAK_HEIGHT)
 
     def plot_averages(self, losses):
         save_path = os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}")

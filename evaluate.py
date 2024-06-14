@@ -92,7 +92,9 @@ def visualize_results(params, model, environment, initial_condition):
     plot_all(params.DIR,
              model,
              environment,
-             initial_condition)
+             initial_condition,
+             limit=0.04,
+             limit_wave=params.PEAK_HEIGHT)
 
 
 def run():
