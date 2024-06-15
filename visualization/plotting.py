@@ -77,9 +77,9 @@ def plot_initial_condition(save_path: str,
 
     z = pinn(x, y, t)
 
-    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN", limit=limit, limit_wave=limit_wave)
-    fig4 = plot_3D(z, x, y, n_points_plot, length, environment, f"{
-                   title} - PINN", limit=limit, limit_wave=limit_wave)
+    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN", limit=limit_wave)
+    fig4 = plot_3D(z, x, y, n_points_plot, length, environment,
+                   f"{title} - PINN", limit=limit, limit_wave=limit_wave)
 
     c1 = fig1.canvas
     c2 = fig2.canvas
@@ -296,7 +296,8 @@ def plot_simulation_by_frame(save_path: str,
                              pinn: PINN,
                              environment: SimulationEnvironment,
                              time_step: float = 0.01,
-                             limit: float = 0.03) -> None:
+                             limit: float = 0.03,
+                             limit_wave=0.001) -> None:
     t_max = environment.domain.T_DOMAIN[1]
     time_values = np.arange(0, t_max, time_step)
 
@@ -306,7 +307,8 @@ def plot_simulation_by_frame(save_path: str,
                    pinn=pinn,
                    idx=idx,
                    t_value=t_value,
-                   limit=limit)
+                   limit=limit,
+                   limit_wave=limit_wave)
 
 
 def running_average(y, window: int = 100):
