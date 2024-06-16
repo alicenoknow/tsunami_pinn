@@ -27,12 +27,12 @@ def plot_all(save_path: str,
     plot_simulation_by_frame(save_path, pinn, environment, limit=limit)
 
     logging.info("Creating GIFs")
-    create_all_gifs(save_path, 3)  # environment.domain.T_DOMAIN[1])
+    create_all_gifs(save_path, environment.domain.T_DOMAIN[1])
 
 
 def create_all_gifs(save_path: str,
                     total_time: float,
-                    step: float = 0.01,
+                    step: float = 0.05,
                     duration: float = 0.1):
     create_gif(save_path, "img", total_time, step, duration)
     create_gif(save_path, "img_top", total_time, step, duration)
@@ -43,7 +43,7 @@ def create_all_gifs(save_path: str,
 def create_gif(save_path: str,
                img_path: str,
                total_time: float,
-               step: float = 0.01,
+               step: float = 0.05,
                duration: float = 0.1) -> None:
     time_values = np.arange(0, total_time, step)
     frames = []
@@ -127,8 +127,8 @@ def plot_color(z: torch.Tensor,
     ax.set_ylabel("y")
 
     c = ax.pcolormesh(X, Y, Z, cmap=cmap,
-                      vmin=-limit/2,  # for better visibility
-                      vmax=limit)
+                      vmin=-limit/4,  # for better visibility
+                      vmax=limit/4)
     fig.colorbar(c, ax=ax)
 
     return fig
@@ -286,9 +286,9 @@ def plot_frame(save_path: str,
 def plot_simulation_by_frame(save_path: str,
                              pinn: PINN,
                              environment: SimulationEnvironment,
-                             time_step: float = 0.01,
+                             time_step: float = 0.05,
                              limit: float = 0.03) -> None:
-    t_max = 3  # environment.domain.T_DOMAIN[1]
+    t_max = environment.domain.T_DOMAIN[1]
     time_values = np.arange(0, t_max, time_step)
 
     for idx, t_value in enumerate(time_values):

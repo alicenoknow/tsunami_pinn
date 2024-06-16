@@ -111,7 +111,7 @@ class Training:
                  self.model,
                  self.environment,
                  self.initial_condition,
-                 limit=0.7)
+                 limit=0.5)
 
     def plot_averages(self, losses):
         save_path = os.path.join(self.params.DIR, f"run_{self.params.RUN_NUM}")
