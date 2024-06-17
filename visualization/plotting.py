@@ -72,8 +72,8 @@ def plot_initial_condition(save_path: str,
     z = initial_condition(x, y, length)
 
     fig1 = plot_color(z, x, y, n_points_plot, f"{title} - exact", limit=limit_wave)
-    fig2 = plot_3D(z, x, y, n_points_plot, length, environment, f"{
-                   title} - exact", limit=limit, limit_wave=limit_wave)
+    fig2 = plot_3D(z, x, y, n_points_plot, length, environment,
+                   f"{title} - exact", limit=limit, limit_wave=limit_wave)
 
     z = pinn(x, y, t)
 

@@ -87,7 +87,7 @@ def wave_equation(
     dzdy = env.partial_y(x, y).to(env.device)
 
     return dfdt(pinn, x, y, t, u, order=2) - \
-        G * (dfdx(pinn, x, y, t, u)**2 + dfdy(pinn, x, y, t, u)**2 -
-             (dzdx * dfdx(pinn, x, y, t, u) + dzdy * dfdy(pinn, x, y, t, u)) +
-             (u - z) * (dfdx(pinn, x, y, t, u, order=2) + dfdy(pinn, x, y, t, u, order=2))
+        G * ((u - z) * (dfdx(pinn, x, y, t, u, order=2) + dfdy(pinn, x, y, t, u, order=2)) +
+             dfdx(pinn, x, y, t, u)**2 + dfdy(pinn, x, y, t, u)**2 -
+             (dzdx * dfdx(pinn, x, y, t, u) + dzdy * dfdy(pinn, x, y, t, u))
              )
