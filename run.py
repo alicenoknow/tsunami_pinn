@@ -11,7 +11,6 @@ from environment.mesh_env import MeshEnvironment
 from environment.simple_env import SimpleEnvironment
 from loss.loss import Loss
 from loss.relo_loss import ReloLoss
-from loss.softadapt_loss import SoftAdaptLoss
 from loss.wave_equations import wave_equation, wave_equation_simplified
 from model.pinn import PINN
 from train.params import LossFunction, SimulationParameters
@@ -97,10 +96,6 @@ def setup_loss(environment,
 
     if params.LOSS == LossFunction.RELO:
         return ReloLoss(environment, initial_condition, wave_equation)
-    elif params.LOSS == LossFunction.SOFTADAPT:
-        return SoftAdaptLoss(environment, initial_condition, wave_equation)
-    elif params.LOSS == LossFunction.MIX:
-        return SoftAdaptLoss(environment, initial_condition, wave_equation)
     return Loss(environment, initial_condition, wave_equation)
 
 

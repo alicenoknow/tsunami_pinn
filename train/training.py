@@ -11,7 +11,6 @@ from loss.loss import Loss
 from model.pinn import PINN
 from train.params import SimulationParameters
 from visualization.plotting import plot_all, plot_running_average
-from visualization.report import create_report
 
 logger = logging.getLogger()
 
@@ -46,9 +45,6 @@ class Training:
                         f"run_{self.params.RUN_NUM}", "img"), exist_ok=True)
             self.plot_averages(losses)
             self.visualize_results()
-
-        if self.params.REPORT:
-            self.report(loss_total[-1], loss_r[-1], loss_i[-1], loss_b[-1], time.time()-start)
 
         return self.model, loss_total, loss_r, loss_i, loss_b
 
@@ -150,45 +146,3 @@ class Training:
                        f"run_{self.params.RUN_NUM}", f"best_{self.params.RUN_NUM}.pt"))
 
             self.best_loss = loss
-
-    def report(self, loss_total, loss_r, loss_i, loss_b, time=0.0):
-        logger.info("Creating report")
-
-        date = datetime.now()
-        save_dir = self.params.DIR
-        num = self.params.RUN_NUM
-        context = {
-            'num': num,
-            'date': date.strftime("%Y-%m-%d %H:%M:%S"),
-            'weight_r': self.params.INITIAL_WEIGHT_RESIDUAL,
-            'weight_i': self.params.INITIAL_WEIGHT_INITIAL,
-            'weight_b': self.params.INITIAL_WEIGHT_BOUNDARY,
-            'layers': self.params.LAYERS,
-            'neurons': self.params.NEURONS_PER_LAYER,
-            'epochs': self.params.EPOCHS,
-            'lr': self.params.LEARNING_RATE,
-            'total_loss': f"{loss_total:.3E}",
-            "residual_loss": f"{loss_r:.3E}",
-            "initial_loss": f"{loss_i:.3E}",
-            "boundary_loss": f"{loss_b:.3E}",
-            "img_loss": os.path.join(save_dir, f"run_{num}", "total_loss.png"),
-            "img_loss_r": os.path.join(save_dir, f"run_{num}", "residual_loss.png"),
-            "img_loss_i": os.path.join(save_dir, f"run_{num}", "initial_loss.png"),
-            "img_loss_b": os.path.join(save_dir, f"run_{num}", "boundary_loss.png"),
-            "mesh_name": self.params.MESH if self.params.MESH else "-",
-            "loss_name": self.params.LOSS,
-            "optim_name": self.params.OPTIM_SWITCH,
-            "base_height": self.params.BASE_HEIGHT,
-            "decay_rate": self.params.DECAY_RATE,
-            "peak_height": self.params.PEAK_HEIGHT,
-            "x_divisor": self.params.X_DIVISOR,
-            "y_divisor": self.params.Y_DIVISOR,
-            "time": time
-        }
-
-        report_path = os.path.join(
-            self.params.DIR, f"run_{self.params.RUN_NUM}", f"report_{self.params.RUN_NUM}.pdf")
-        create_report(context,
-                      env_path='.',
-                      template_path='report_template.html',
-                      report_title=report_path)

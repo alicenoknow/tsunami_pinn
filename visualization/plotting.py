@@ -201,7 +201,7 @@ def plot_3D_side_view(z: torch.Tensor,
             yaxis=dict(title="y"),
             zaxis=dict(range=[-limit, limit]),
             camera=dict(
-                eye=dict(x=1.1, y=1.1, z=1.1)
+                eye=dict(x=0, y=1.5, z=0.3)
             )
         ))
 
