@@ -4,6 +4,7 @@ import logging
 import sys
 import os
 import torch
+from datetime import datetime
 
 from conditions.initial import make_initial_condition
 from environment.mesh_env import MeshEnvironment
@@ -129,4 +130,7 @@ def run():
 
 
 if __name__ == "__main__":
+    start_time = datetime.now()
     run()
+    time_elapsed = datetime.now() - start_time
+    print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed))
