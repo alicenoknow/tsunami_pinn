@@ -12,11 +12,11 @@ class Domain:
 
     """
     XY_DOMAIN: Tuple[float, float] = (0, 17.2946)
-    T_DOMAIN: Tuple[float, float] = (0, 5)
+    T_DOMAIN: Tuple[float, float] = (0, 3)
 
     N_POINTS: int = 50
-    INITIAL_POINTS: int = 180
-    BOUNDARY_POINTS: int = 100
+    INITIAL_POINTS: int = 100
+    BOUNDARY_POINTS: int = 80
     T_POINTS: int = 60
 
     N_POINTS_PLOT: int = 120

@@ -17,14 +17,16 @@ def plot_all(save_path: str,
              pinn: PINN,
              environment: SimulationEnvironment,
              initial_condition: Callable,
-             limit: float = 0.1):
+             limit: float = 0.1,
+             limit_wave: float = 0.01):
     os.makedirs(os.path.join(save_path, "img"), exist_ok=True)
 
     logging.info("Plotting initial condition results")
-    plot_initial_condition(save_path, environment, pinn, initial_condition, limit=0.1)
+    plot_initial_condition(save_path, environment, pinn, initial_condition,
+                           limit=limit, limit_wave=limit_wave)
 
     logging.info("Plotting simulation frames")
-    plot_simulation_by_frame(save_path, pinn, environment, limit=limit)
+    plot_simulation_by_frame(save_path, pinn, environment, limit=limit, limit_wave=limit_wave)
 
     logging.info("Creating GIFs")
     create_all_gifs(save_path, environment.domain.T_DOMAIN[1])
@@ -58,7 +60,8 @@ def plot_initial_condition(save_path: str,
                            environment: SimulationEnvironment,
                            pinn: PINN,
                            initial_condition: Callable,
-                           limit: float) -> None:
+                           limit: float,
+                           limit_wave: float) -> None:
 
     title = "Initial condition"
     n_points_plot = environment.domain.N_POINTS_PLOT
@@ -68,13 +71,15 @@ def plot_initial_condition(save_path: str,
 
     z = initial_condition(x, y, length)
 
-    fig1 = plot_color(z, x, y, n_points_plot, f"{title} - exact", limit=limit)
-    fig2 = plot_3D(z, x, y, n_points_plot, length, environment, f"{title} - exact", limit=limit)
+    fig1 = plot_color(z, x, y, n_points_plot, f"{title} - exact", limit=limit_wave)
+    fig2 = plot_3D(z, x, y, n_points_plot, length, environment,
+                   f"{title} - exact", limit=limit, limit_wave=limit_wave)
 
     z = pinn(x, y, t)
 
-    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN", limit=limit)
-    fig4 = plot_3D(z, x, y, n_points_plot, length, environment, f"{title} - PINN", limit=limit)
+    fig3 = plot_color(z, x, y, n_points_plot, f"{title} - PINN", limit=limit_wave)
+    fig4 = plot_3D(z, x, y, n_points_plot, length, environment,
+                   f"{title} - PINN", limit=limit, limit_wave=limit_wave)
 
     c1 = fig1.canvas
     c2 = fig2.canvas
@@ -127,8 +132,8 @@ def plot_color(z: torch.Tensor,
     ax.set_ylabel("y")
 
     c = ax.pcolormesh(X, Y, Z, cmap=cmap,
-                      vmin=-limit/4,  # for better visibility
-                      vmax=limit/4)
+                      vmin=-limit,
+                      vmax=limit)
     fig.colorbar(c, ax=ax)
 
     return fig
@@ -140,14 +145,15 @@ def plot_3D_top_view(z: torch.Tensor,
                      n_points_plot: int,
                      environment: SimulationEnvironment,
                      title: str,
-                     limit=0.03):
+                     limit: float,
+                     limit_wave: float):
 
     X = convert_to_numpy(x, n_points_plot)
     Y = convert_to_numpy(y, n_points_plot)
     Z = convert_to_numpy(z, n_points_plot)
 
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
-                    cmin=-0.1, cmax=0.1, colorscale="ice", colorbar=dict(title="Wave altitude", x=-0.1))])
+                    cmin=-limit_wave, cmax=limit_wave, colorscale="ice", colorbar=dict(title="Wave altitude", x=-0.1))])
 
     fig.update_layout(
         title=title,
@@ -178,14 +184,15 @@ def plot_3D_side_view(z: torch.Tensor,
                       n_points_plot: int,
                       environment: SimulationEnvironment,
                       title: str,
-                      limit=0.03):
+                      limit: float,
+                      limit_wave: float):
 
     X = convert_to_numpy(x, n_points_plot)
     Y = convert_to_numpy(y, n_points_plot)
     Z = convert_to_numpy(z, n_points_plot)
 
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
-                    cmin=-0.1, cmax=0.1, colorscale="ice", colorbar=dict(title="Wave altitude", x=-0.1))])
+                    cmin=-limit_wave, cmax=limit_wave, colorscale="ice", colorbar=dict(title="Wave altitude", x=-0.1))])
 
     fig.update_layout(
         title=title,
@@ -216,7 +223,7 @@ def plot_3D(z: torch.Tensor,
             n_points_plot: int,
             length: int,
             environment: SimulationEnvironment,
-            title: str, figsize=(8, 6), limit=0.03):
+            title: str, figsize=(8, 6), limit=0.03, limit_wave=0.01):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
 
@@ -228,7 +235,7 @@ def plot_3D(z: torch.Tensor,
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.axes.set_zlim3d(bottom=-limit, top=limit)
-    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=-0.1, vmax=0.1, cmap="ocean")
+    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=-limit_wave, vmax=limit_wave, cmap="ocean")
 
     if isinstance(environment, MeshEnvironment):
         ax.plot_trisurf(environment.x_raw,
@@ -255,7 +262,8 @@ def plot_frame(save_path: str,
                pinn: PINN,
                idx: int,
                t_value: float,
-               limit: float) -> None:
+               limit: float,
+               limit_wave: float) -> None:
 
     n_points_plot = environment.domain.N_POINTS_PLOT
     length = environment.domain.XY_DOMAIN[1]
@@ -265,18 +273,21 @@ def plot_frame(save_path: str,
     z = pinn(x, y, t)
 
     title = "PINN for t = %.2f" % t_value
-    fig1 = plot_color(z, x, y, n_points_plot, title, limit=limit)
+    fig1 = plot_color(z, x, y, n_points_plot, title, limit=limit_wave)
     plt.savefig(os.path.join(save_path, "img", "img_color_{:03d}.png".format(idx)))
 
-    fig2 = plot_3D_top_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig2 = plot_3D_top_view(z, x, y, n_points_plot, environment,
+                            title, limit=limit, limit_wave=limit_wave)
     img_path = os.path.join(save_path, "img", "img_top_{:03d}.png".format(idx))
     fig2.write_image(img_path)
 
-    fig3 = plot_3D_side_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig3 = plot_3D_side_view(z, x, y, n_points_plot, environment,
+                             title, limit=limit, limit_wave=limit_wave)
     img_path = os.path.join(save_path, "img", "img_side_{:03d}.png".format(idx))
     fig3.write_image(img_path)
 
-    fig4 = plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit)
+    fig4 = plot_3D(z, x, y, n_points_plot, length, environment,
+                   title, limit=limit, limit_wave=limit_wave)
     plt.savefig(os.path.join(save_path, "img", "img_{:03d}.png".format(idx)))
 
     plt.close(fig1)
@@ -287,7 +298,8 @@ def plot_simulation_by_frame(save_path: str,
                              pinn: PINN,
                              environment: SimulationEnvironment,
                              time_step: float = 0.05,
-                             limit: float = 0.03) -> None:
+                             limit: float = 0.03,
+                             limit_wave: float = 0.01) -> None:
     t_max = environment.domain.T_DOMAIN[1]
     time_values = np.arange(0, t_max, time_step)
 
@@ -297,7 +309,8 @@ def plot_simulation_by_frame(save_path: str,
                    pinn=pinn,
                    idx=idx,
                    t_value=t_value,
-                   limit=limit)
+                   limit=limit,
+                   limit_wave=limit_wave)
 
 
 def running_average(y, window: int = 100):

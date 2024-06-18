@@ -1,5 +1,6 @@
 import argparse
 from dataclasses import fields
+from datetime import datetime
 import logging
 import sys
 import os
@@ -129,4 +130,7 @@ def run():
 
 
 if __name__ == "__main__":
+    start_time = datetime.now()
     run()
+    time_elapsed = datetime.now() - start_time
+    print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed))

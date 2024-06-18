@@ -23,16 +23,19 @@ def plot_initial(environment: SimulationEnvironment,
     z = initial_condition(x, y, torch.max(x))
 
     limit = 0.5
-    plot_color(z, x, y, n_points_plot, title, limit=limit)
+    limit_wave = 0.12
+    plot_color(z, x, y, n_points_plot, title, limit=limit_wave)
     plt.show()
 
-    plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit)
+    plot_3D(z, x, y, n_points_plot, length, environment, title, limit=limit, limit_wave=limit_wave)
     plt.show()
 
-    fig = plot_3D_top_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig = plot_3D_top_view(z, x, y, n_points_plot, environment,
+                           title, limit=limit, limit_wave=limit_wave)
     fig.show()
 
-    fig = plot_3D_side_view(z, x, y, n_points_plot, environment, title, limit=limit)
+    fig = plot_3D_side_view(z, x, y, n_points_plot, environment,
+                            title, limit=limit, limit_wave=limit_wave)
     fig.show()
 
 
@@ -46,8 +49,8 @@ if __name__ == '__main__':
     environment = MeshEnvironment(params.MESH, device) if params.MESH else SimpleEnvironment(device)
     initial_condition = make_initial_condition(
         base_height=params.BASE_HEIGHT,
-        decay_rate=0.4,
-        peak_height=0.12,  # 0.04 - 130m
+        decay_rate=0.3,
+        peak_height=0.1,  # 0.04 - 130m
         x_divisor=params.X_DIVISOR,
         y_divisor=params.Y_DIVISOR)
 

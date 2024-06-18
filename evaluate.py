@@ -93,7 +93,8 @@ def visualize_results(params, model, environment, initial_condition):
              model,
              environment,
              initial_condition,
-             limit=1)
+             limit=0.5,
+             limit_wave=params.PEAK_HEIGHT)
 
 
 def run():
