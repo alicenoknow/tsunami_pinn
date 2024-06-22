@@ -28,7 +28,7 @@ def dump_points(filename: str, z_relative_to_x: bool = False):
     y = (y - min_x) / (max_x - min_x)
 
     if z_relative_to_x:
-        z = z / (max_x - min_x)
+        z = (z - min_z) / (max_x - min_x)
     else:
         z = z / (max_z - min_z)
 

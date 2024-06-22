@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import os
 
-from typing import Callable
+from typing import Callable, Tuple
 from environment.env import SimulationEnvironment
 from environment.mesh_env import MeshEnvironment
 
@@ -18,7 +18,7 @@ def plot_all(save_path: str,
              environment: SimulationEnvironment,
              initial_condition: Callable,
              limit: float = 0.1,
-             limit_wave=0.01):
+             limit_wave=(0, 1)):
     os.makedirs(os.path.join(save_path, "img"), exist_ok=True)
 
     logging.info("Plotting initial condition results")
@@ -61,7 +61,7 @@ def plot_initial_condition(save_path: str,
                            pinn: PINN,
                            initial_condition: Callable,
                            limit: float,
-                           limit_wave: float) -> None:
+                           limit_wave: Tuple[float]) -> None:
 
     title = "Initial condition"
     n_points_plot = environment.domain.N_POINTS_PLOT
@@ -120,7 +120,7 @@ def plot_color(z: torch.Tensor,
                y: torch.Tensor,
                n_points_plot: int,
                title,
-               figsize=(8, 6), dpi=100, cmap="viridis", limit=0.03):
+               figsize=(8, 6), dpi=100, cmap="viridis", limit=(0,1)):
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     X = convert_to_numpy(x, n_points_plot)
@@ -132,8 +132,8 @@ def plot_color(z: torch.Tensor,
     ax.set_ylabel("y")
 
     c = ax.pcolormesh(X, Y, Z, cmap=cmap,
-                      vmin=-limit,
-                      vmax=limit)
+                      vmin=limit[0],
+                      vmax=limit[1])
     fig.colorbar(c, ax=ax)
 
     return fig
@@ -146,21 +146,21 @@ def plot_3D_top_view(z: torch.Tensor,
                      environment: SimulationEnvironment,
                      title: str,
                      limit=0.03,
-                     limit_wave=0.001):
+                     limit_wave=(0, 1)):
 
     X = convert_to_numpy(x, n_points_plot)
     Y = convert_to_numpy(y, n_points_plot)
     Z = convert_to_numpy(z, n_points_plot)
 
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
-                    cmin=-limit_wave, cmax=limit_wave, colorscale="Blues_r")])
+                    cmin=limit_wave[0], cmax=limit_wave[1], colorscale="Blues_r")])
 
     fig.update_layout(
         title=title,
         scene=dict(
             xaxis=dict(title="x"),
             yaxis=dict(title="y"),
-            zaxis=dict(range=[-limit, limit]),
+            zaxis=dict(range=[0, limit]),
             camera=dict(
                 eye=dict(x=0, y=0, z=2)  # Set the eye position for a top-down view
             )
@@ -185,21 +185,21 @@ def plot_3D_side_view(z: torch.Tensor,
                       environment: SimulationEnvironment,
                       title: str,
                       limit=0.03,
-                      limit_wave=0.001):
+                      limit_wave=(0, 1)):
 
     X = convert_to_numpy(x, n_points_plot)
     Y = convert_to_numpy(y, n_points_plot)
     Z = convert_to_numpy(z, n_points_plot)
 
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z, opacity=1,
-                    cmin=-limit_wave, cmax=limit_wave, colorscale="Blues_r")])
+                    cmin=limit_wave[0], cmax=limit_wave[1], colorscale="Blues_r")])
 
     fig.update_layout(
         title=title,
         scene=dict(
             xaxis=dict(title="x"),
             yaxis=dict(title="y"),
-            zaxis=dict(range=[-limit, limit]),
+            zaxis=dict(range=[0, limit]),
             camera=dict(
                 eye=dict(x=1, y=2.5, z=0.5)
             )
@@ -223,7 +223,7 @@ def plot_3D(z: torch.Tensor,
             n_points_plot: int,
             length: int,
             environment: SimulationEnvironment,
-            title: str, figsize=(8, 6), limit=0.03, limit_wave=0.001):
+            title: str, figsize=(8, 6), limit=0.03, limit_wave=(0, 1)):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
 
@@ -234,8 +234,8 @@ def plot_3D(z: torch.Tensor,
     ax.set_title(title)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.axes.set_zlim3d(bottom=-limit, top=limit)
-    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=-limit_wave, vmax=limit_wave, cmap="Blues_r")
+    ax.axes.set_zlim3d(bottom=0, top=limit)
+    ax.plot_surface(X, Y, Z, alpha=0.8, vmin=limit_wave[0], vmax=limit_wave[1], cmap="Blues_r")
 
     if isinstance(environment, MeshEnvironment):
         ax.plot_trisurf(environment.x_raw,
@@ -263,7 +263,7 @@ def plot_frame(save_path: str,
                idx: int,
                t_value: float,
                limit: float,
-               limit_wave: float) -> None:
+               limit_wave: Tuple[float]) -> None:
 
     n_points_plot = environment.domain.N_POINTS_PLOT
     x, y, t = environment.get_initial_points(n_points_plot, requires_grad=False)
@@ -297,7 +297,7 @@ def plot_simulation_by_frame(save_path: str,
                              environment: SimulationEnvironment,
                              time_step: float = 0.01,
                              limit: float = 0.03,
-                             limit_wave=0.001) -> None:
+                             limit_wave=(0, 1)) -> None:
     t_max = environment.domain.T_DOMAIN[1]
     time_values = np.arange(0, t_max, time_step)
 

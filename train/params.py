@@ -37,7 +37,7 @@ class SimulationParameters:
     DIR: str = "results"
 
     # Initial condition
-    BASE_HEIGHT: float = 0.0  # Base water level
+    BASE_HEIGHT: float = 0.0476  # Base water level
     DECAY_RATE: float = 120  # The rate of decay, how quickly func decreases with distance
     PEAK_HEIGHT: float = 0.002  # The height of the function's peak (0.00002 = 1m)
     X_DIVISOR: float = 5  # The divisor used to calculate the x-coord of the center of the function
