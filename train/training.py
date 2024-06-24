@@ -111,7 +111,7 @@ class Training:
                  self.model,
                  self.environment,
                  self.initial_condition,
-                 limit=0.08,
+                 limit=self.params.BASE_HEIGHT + 2*self.params.PEAK_HEIGHT,  # just to have some space above
                  limit_wave=(self.params.BASE_HEIGHT - self.params.PEAK_HEIGHT,
                              self.params.BASE_HEIGHT + self.params.PEAK_HEIGHT))
 

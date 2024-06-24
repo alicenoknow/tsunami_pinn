@@ -68,10 +68,8 @@ def wave_equation_simplified(
         _env: "SimulationEnvironment"):  # noqa: F821 # type: ignore
     u = f(pinn, x, y, t)
     return dfdt(pinn, x, y, t, u, order=2) - \
-        G * (dfdx(pinn, x, y, t, u) ** 2 +
-             (u - z) * dfdx(pinn, x, y, t, u, order=2) +
-             dfdy(pinn, x, y, t, u) ** 2 +
-             (u - z) * dfdy(pinn, x, y, t, u, order=2))
+        G * (dfdx(pinn, x, y, t, u) ** 2 + dfdy(pinn, x, y, t, u) ** 2 +
+             u * (dfdx(pinn, x, y, t, u, order=2) + dfdy(pinn, x, y, t, u, order=2)))
 
 
 def wave_equation(
@@ -88,6 +86,5 @@ def wave_equation(
 
     return dfdt(pinn, x, y, t, u, order=2) - \
         G * ((u - z) * (dfdx(pinn, x, y, t, u, order=2) + dfdy(pinn, x, y, t, u, order=2)) +
-             dfdx(pinn, x, y, t, u)**2 + dfdy(pinn, x, y, t, u)**2 -
-             (dzdx * dfdx(pinn, x, y, t, u) + dzdy * dfdy(pinn, x, y, t, u))
-             )
+             (dfdx(pinn, x, y, t, u) - dzdx) * dfdx(pinn, x, y, t, u) +
+             (dfdy(pinn, x, y, t, u) - dzdy) * dfdy(pinn, x, y, t, u))

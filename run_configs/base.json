@@ -1,13 +1,13 @@
 {
   "INFO": "Basic config without mesh and with wave in the center",
   "LAYERS": 3,
-  "NEURONS_PER_LAYER": 300,
+  "NEURONS_PER_LAYER": 200,
   "LOSS": "BASE",
   "OPTIM_SWITCH": 35000,
 
   "RUN_NUM": 0,
   "EPOCHS": 40000,
-  "LEARNING_RATE": 0.00025,
+  "LEARNING_RATE": 0.0005,
   "SAVE_BEST_CLB": true,
   "VISUALIZE": true,
   "REPORT": true,
@@ -17,13 +17,13 @@
   "MESH": null,
   "DIR": "results",
 
-  "BASE_HEIGHT": 0.0476,
-  "DECAY_RATE": 120,
-  "PEAK_HEIGHT": 0.02,
+  "BASE_HEIGHT": 1,
+  "DECAY_RATE": 40,
+  "PEAK_HEIGHT": 0.5,
   "X_DIVISOR": 2,
   "Y_DIVISOR": 2,
 
   "INITIAL_WEIGHT_BOUNDARY": 0.1,
-  "INITIAL_WEIGHT_INITIAL": 10,
+  "INITIAL_WEIGHT_INITIAL": 20,
   "INITIAL_WEIGHT_RESIDUAL": 0.5
 }
