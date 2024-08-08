@@ -28,9 +28,9 @@ LEARNING_RATE = 0.001
 
 MESH_FILENAME = "data/val_square_UTM_translated_10.inp"
 
-NAME = "overwater_relo_peak2000t01"
+NAME = "overwater_relo_corner2000t0001"
 
-DIR = "./results/over_peak/relo"
+DIR = "./results/over_corner/relo"
 
 t_domain = [0, TOTAL_TIME]
 
@@ -224,7 +224,7 @@ class Loss:
         self.weight_i = weight_i
         self.epoch = 0
         self.alpha = 0.998
-        self.temperature = 0.1
+        self.temperature = 0.001
         self.rho = 0.9999
         self.call_count = torch.tensor(0, requires_grad=False, dtype=torch.int16)
 
@@ -437,8 +437,8 @@ def train_model(
     return nn_approximator, np.array(loss_values), np.array(residual_loss_values), np.array(initial_loss_values), np.array(boundary_loss_values)
 
 def initial_condition(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-    r = torch.sqrt((x-LENGTH/5)**2 + (y-LENGTH/2))**2)
-    res = 0.05 * torch.exp(-(r)**2 * 70) + 0.8169
+    r = torch.sqrt((x-LENGTH/5)**2 + (y-LENGTH/(4/3))**2)
+    res = 0.1 * torch.exp(-(r)**2 * 100) + 0.8169
     return res
 
 pinn = PINN(LAYERS, NEURONS_PER_LAYER, act=nn.Tanh()).to(device)

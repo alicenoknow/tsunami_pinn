@@ -20,8 +20,8 @@ N_POINTS = 20 # Number of in single asxis
 N_POINTS_PLOT = 128 # Number of points in single axis used in plotting
 
 WEIGHT_RESIDUAL = 0.01 #0.03 # Weight of residual part of loss function
-WEIGHT_INITIAL = 1000.0 # 1.0 # Weight of initial part of loss function
-WEIGHT_BOUNDARY = 0.01 # 0.0005 # Weight of boundary part of loss function
+WEIGHT_INITIAL = 700.0 # 1.0 # Weight of initial part of loss function
+WEIGHT_BOUNDARY = 1 # 0.0005 # Weight of boundary part of loss function
 GRAVITY = 9.81
 
 LAYERS = 4
@@ -29,7 +29,7 @@ NEURONS_PER_LAYER = 150
 EPOCHS = 100_000
 LEARNING_RATE = 0.001
 
-NAME = "casual_new_wr01wi1000"
+NAME = "casual_new_eps01wi700wb1"
 
 DIR = "./results/flat/causal"
 

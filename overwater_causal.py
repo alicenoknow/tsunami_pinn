@@ -22,9 +22,9 @@ WEIGHT_BOUNDARY = 0.01 # 0.0005 # Weight of boundary part of loss function
 GRAVITY = 9.81
 
 
-#WEIGHT_RESIDUAL = 0.5 # 0.03 # Weight of residual part of loss function
-#WEIGHT_INITIAL = 5.0 # 1.0 # Weight of initial part of loss function
-#WEIGHT_BOUNDARY = 0.001 # 0.0005 # Weight of boundary part of loss function
+#WEIGHT_RESIDUAL = 0.02 # 0.03 # Weight of residual part of loss function
+#WEIGHT_INITIAL = 10.0 # 1.0 # Weight of initial part of loss function
+#WEIGHT_BOUNDARY = 0.01 # 0.0005 # Weight of boundary part of loss function
 
 LAYERS = 4
 NEURONS_PER_LAYER = 150
@@ -33,7 +33,7 @@ LEARNING_RATE = 0.001
 
 MESH_FILENAME = "data/val_square_UTM_translated_10.inp"
 
-NAME = "overwater_causal_e05_wr01wi10wb01"
+NAME = "overwater_causal_e05_wr002wi10wb001"
 
 DIR = "./results/over/causal"
 
