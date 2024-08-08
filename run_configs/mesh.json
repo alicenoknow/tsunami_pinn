@@ -1,11 +1,11 @@
 {
   "INFO": "Basic config with mesh",
   "LAYERS": 4,
-  "NEURONS_PER_LAYER": 200,
+  "NEURONS_PER_LAYER": 240,
   "LOSS": "BASE",
 
   "RUN_NUM": 0,
-  "EPOCHS": 1,
+  "EPOCHS": 70000,
   "LEARNING_RATE": 0.00015,
   "SAVE_BEST_CLB": true,
   "VISUALIZE": true,
@@ -13,16 +13,16 @@
   "CLIP_GRAD": false,
 
   "GRAVITY": 9.81,
-  "MESH": "data/val_square_UTM_translated_12.inp",
+  "MESH": "data/val_square_UTM_translated_11.inp",
   "DIR": "results",
 
   "BASE_HEIGHT": 0.0,
-  "DECAY_RATE": 120,
-  "PEAK_HEIGHT": 0.4,
+  "DECAY_RATE": 90,
+  "PEAK_HEIGHT": 0.3,
   "X_DIVISOR": 5,
   "Y_DIVISOR": 2,
 
-  "INITIAL_WEIGHT_BOUNDARY": 0.01,
-  "INITIAL_WEIGHT_INITIAL": 3,
-  "INITIAL_WEIGHT_RESIDUAL": 0.1
+  "INITIAL_WEIGHT_BOUNDARY": 0.1,
+  "INITIAL_WEIGHT_INITIAL": 15,
+  "INITIAL_WEIGHT_RESIDUAL": 1
 }

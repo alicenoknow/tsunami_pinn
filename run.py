@@ -47,13 +47,17 @@ def setup_params(params):
 
     params.set_json(args.config)
     params.set_cli_args(args)
+    setup_run_dir(params)
     params.save_params()
+
+def setup_run_dir(params):
+    run_dir = os.path.join(params.DIR, f"run_{params.RUN_NUM}")
+    os.makedirs(run_dir, exist_ok=True)
 
 
 def setup_logger(params):
     log_format = '[%(levelname)s] %(message)s'
     log_dir = os.path.join(params.DIR, f"run_{params.RUN_NUM}")
-    os.makedirs(log_dir, exist_ok=True)
 
     file_handler = logging.FileHandler(
         os.path.join(

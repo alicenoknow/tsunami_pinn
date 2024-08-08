@@ -12,7 +12,7 @@ class Domain:
 
     """
     XY_DOMAIN: Tuple[float, float] = (0, 1.0)
-    T_DOMAIN: Tuple[float, float] = (0, 0.5)
+    T_DOMAIN: Tuple[float, float] = (0, 0.25)
 
     N_POINTS: int = 15
     T_POINTS: int = 30

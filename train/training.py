@@ -65,9 +65,6 @@ class Training:
                 optimizer.zero_grad()
                 loss[0].backward()
 
-                if self.params.CLIP_GRAD:
-                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
-
                 optimizer.step()
 
                 if self.params.SAVE_BEST_CLB:
